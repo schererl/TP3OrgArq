@@ -1,8 +1,13 @@
 #include <string>
 using namespace std;
 
+class OperadorBits
+{
+
+
+public:
 //move os N primeiros bits de entrada para o parâmetro de saída (remove esses bits do binário de entrada)
-void ExtrairBinario(string &binario_entrada, string &binario_saida, int numero_bits)
+static void ExtrairBinario(string &binario_entrada, string &binario_saida, int numero_bits)
 {
     string buffer;
     for(char i : binario_entrada)
@@ -15,20 +20,22 @@ void ExtrairBinario(string &binario_entrada, string &binario_saida, int numero_b
 }
 
 //shift dos binário
-void ShiftLeft(string &binario, int numero_shifts)
+static void ShiftLeft(string &binario, int numero_shifts)
 {
     while(binario.size() < binario.size() + numero_shifts) binario = binario + "0";
 }
 
 //trunca binário
-void Trunc(string &binario, int bits_cortados)
+static void Trunc(string &binario, int bits_cortados)
 {
     binario.erase(0, bits_cortados);
 }
 
+
 //Operações da ULA
-string OperaAnd(string A, string B){}
-string OperaOr(string A, string B){}
-string OperaAdd(string A, string B){}
-string OperaSub(string A, string B){}
-string OperaSetOnLess(string A, string B){}
+static string OperaAnd(string A, string B){ return "";}
+static string OperaOr(string A, string B){ return "";}
+static string OperaAdd(string A, string B){ return "";}
+static string OperaSub(string A, string B){return "";}
+static string OperaSetOnLess(string A, string B){return "";}
+};
