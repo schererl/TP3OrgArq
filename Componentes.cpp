@@ -1,5 +1,6 @@
 #include <string>
 #include <stdlib.h>
+#include "OperadorBits.cpp"
 using namespace std;
 class Componentes
 {
@@ -42,7 +43,52 @@ class Componentes
         }
     };
 
+    struct ULA
+    {
+        string nome;
+        Barramento *entradaA;
+        Barramento *entradaB;
+        Barramento *zero;
+        Barramento *saida;
+        
+        ULA(string nome, Barramento *entradaA, Barramento *entradaB)
+        {
+            this->nome = nome;
+            this->entradaA = entradaA;
+            this->entradaB = entradaB;
+        }
+
+        string Operar(int op)
+        {
+            string resultado;
+            switch(op)
+            {
+                case "000":
+                    resultado = OperadorBits::OperaAnd(entradaA->valor, entradaB->valor);
+                    break;
+                case "001":
+                    resultado = OperadorBits::OperaOr(entradaA->valor, entradaB->valor);
+                    break;
+                case "010":
+                    resultado = OperadorBits::OperaAdd(entradaA->valor, entradaB->valor);
+                    break;
+                case "110":
+                    resultado = OperadorBits::OperaSub(entradaA->valor, entradaB->valor);
+                    break;
+                case "111":
+                    resultado = OperadorBits::OperaSetOnLess(entradaA->valor, entradaB->valor);
+                    break;
+                default:
+                    break;
+
+            }
+            saida->valor = resultado;
+            flag -> valor = resultado;
+        }
+        
     
+    };
+
     Barramento CriaBarramento(string nome)
     {
         return Barramento(nome);
@@ -51,5 +97,10 @@ class Componentes
     Multiplexador CriaMultiplexador(string nome, Barramento *entrada, Barramento *saida, int numero_entradas)
     {
         return Multiplexador(nome, entrada, saida, numero_entradas);
+    }
+
+    ULA CriaULA(string nome, Barramento *entradaA, Barramento *entradaB)
+    {
+        return ULA(nome, entradaA, entradaB);
     }
 };
