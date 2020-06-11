@@ -31,16 +31,16 @@ class Componentes
         int numero_entradas;  //numero de barramentos de entradas
         Barramento *saida;
         Barramento *escolhe_entrada;
-        Multiplexador(string nome, Barramento *entrada, Barramento *saida, int numero_entradas, Barramento *escolhe_entrada)
+        Multiplexador(string nome, Barramento *entrada, Barramento *saida, int numero_entradas, Barramento *escolhe_entrada)//escolhe entrada é o sinal de seleção
         {
             this->nome = nome;
             this->entrada = entrada;
             this->numero_entradas = numero_entradas;
             this->saida = saida;
             this->escolhe_entrada = escolhe_entrada;
-            
+
         }
-        
+
         //define o valor de saída
         void DefineSaida()
         {
@@ -75,15 +75,15 @@ class Componentes
 
         void BuscaInstrucao()
         {
-            auto search = memoria.find(endereco->valor); 
+            auto search = memoria.find(endereco->valor);
             if(search != memoria.end())  instrucao -> valor = search->second;
-            
-            
+
+
         }
 
         void GravaDado()
         {
-            memoria[endereco->valor] = dado->valor;   
+            memoria[endereco->valor] = dado->valor;
         }
     };
 
@@ -94,37 +94,40 @@ class Componentes
         Barramento *entradaB;
         Barramento *zero;
         Barramento *saida;
-        //aluop
+        Barramento *aluop;
 
-        ULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero)
+
+        ULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
         {
             this->nome = nome;
             this->entradaA = entradaA;
             this->entradaB = entradaB;
             this->saida = saida;
             this->zero = zero;
+            this->aluop = aluop;
         }
 
-        void Operar(string op)
+        void Operar()
         {
             string resultado;
+            string op = aluop->valor;
             if(op == "000")
                 resultado = OperadorBits::OperaAnd(entradaA->valor, entradaB->valor);
             else if(op == "001")
                 resultado = OperadorBits::OperaOr(entradaA->valor, entradaB->valor);
-            else if(op == "010")        
+            else if(op == "010")
                 resultado = OperadorBits::OperaAdd(entradaA->valor, entradaB->valor);
-            else if(op == "110") 
+            else if(op == "110")
                 resultado = OperadorBits::OperaSub(entradaA->valor, entradaB->valor);
-            else if(op == "111")    
+            else if(op == "111")
                 resultado = OperadorBits::OperaSetOnLess(entradaA->valor, entradaB->valor);
-            
-            
+
+
             saida -> valor = resultado;
             zero -> valor = resultado;
         }
-        
-    
+
+
     };
 
     Barramento CriaBarramento(string nome)
@@ -137,14 +140,14 @@ class Componentes
         return Multiplexador(nome, entrada, saida, numero_entradas, escolhe_entrada);
     }
 
-    ULA CriaULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero)
+    ULA CriaULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
     {
-        return ULA(nome, entradaA, entradaB, saida, zero);
+        return ULA(nome, entradaA, entradaB, saida, zero, aluop);
     }
 
     Memoria CriaMemoria(Barramento *endereco, Barramento*instrucao, Barramento*dado, Barramento *ler_mem, Barramento *esc_mem)
     {
         return Memoria(endereco, instrucao, dado, ler_mem, esc_mem);
-        
+
     }
 };
