@@ -63,7 +63,7 @@ static string OperaOr(string A, string B)
     }
     return result;
 }
-static string OperaAdd(string A, string B)
+static string OperaAdd(string A, string B) //***incompleto***
 {
     if(A.length() != B.length()){
         return "Entradas de tamanhos diferentes!";
