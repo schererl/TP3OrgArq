@@ -24,12 +24,12 @@ int main()
     Componentes::Barramento b_ula_aluop = c.CriaBarramento("Barramento Aluop");
     Componentes::Barramento b_saida_pc = c.CriaBarramento("Barramento Saída PC");
     Componentes::Barramento b_saida_reg_A = c.CriaBarramento("Barramento Saída Reg A");
-    Componentes::Barramento b_saida_reg_B = c.CriaBarramento("Barramento Saída Reg B");
-    Componentes::Barramento b_incrementa_pc_4 = c.CriaBarramento("Barramento Saída PC + 4");
-    Componentes::Barramento b_saida_sign_ext = c.CriaBarramento("Barramento Extensão de Sinal");
-    Componentes::Barramento b_saida_desl_esq_2 = c.CriaBarramento("Barramento Deslocamento esquerda 2");
-    Componentes::Barramento b_sinal_mux_A = c.CriaBarramento("Barramento Saída Fonte A do Controle");
-    Componentes::Barramento b_sinal_mux_B = c.CriaBarramento("Barramento Saída Fonte B do Controle");
+    Componentes::Barramento b_saida_reg_B = c.CriaBarramento("Barramento Saída Reg B");                     //entrada 0 do mux 4 entradas (primeira entrada)
+    Componentes::Barramento b_incrementa_pc_4 = c.CriaBarramento("Barramento Saída PC + 4");                //entrada pc + 4 do mux 4 entradas (segunda entrada)
+    Componentes::Barramento b_saida_sign_ext = c.CriaBarramento("Barramento Extensão de Sinal");            //sign ext(terceira entrada)
+    Componentes::Barramento b_saida_desl_esq_2 = c.CriaBarramento("Barramento Deslocamento esquerda 2");    //ssl 2 (quarta entrada)
+    Componentes::Barramento b_sinal_mux_A = c.CriaBarramento("Barramento Saída Fonte A do Controle");       //Controle ULAFonteA
+    Componentes::Barramento b_sinal_mux_B = c.CriaBarramento("Barramento Saída Fonte B do Controle");       //Controle ULAFonteB
 
 
     b1.valor = "0x00400006";
@@ -64,12 +64,12 @@ int main()
 
     //cria multiplexador
     numero_barramentos = 4;
-    Componentes::Barramento *b = (Componentes::Barramento*)malloc(numero_barramentos * sizeof(Componentes::Barramento));
-    b[0] = b1;
-    b[1] = b2;
-    b[2] = b2;
-    b[3] = b2;
-    Componentes::Multiplexador m = c.CriaMultiplexador("Multiplexador 1", b, &, numero_barramentos, &bsm);
+    Componentes::Barramento *b_mux_entrada_b = (Componentes::Barramento*)malloc(numero_barramentos * sizeof(Componentes::Barramento));
+    b_mux_entrada_b[0] = b_saida_reg_B;
+    b_mux_entrada_b[1] = b_incrementa_pc_4;
+    b_mux_entrada_b[2] = b_saida_sign_ext;
+    b_mux_entrada_b[3] = b_saida_desl_esq_2;
+    Componentes::Multiplexador m = c.CriaMultiplexador("Multiplexador Entrada B", b_mux_entrada_b, &b_saida_reg_B, numero_barramentos, &b_sinal_mux_B);
 
 
 
