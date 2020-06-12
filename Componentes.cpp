@@ -130,6 +130,41 @@ class Componentes
 
     };
 
+    struct BancoReg {
+        Barramento *reg_lido_1; //entrada 1
+        Barramento *reg_lido_2; //entrada 2
+        Barramento *reg_escrito; //entrada 3
+        Barramento *dado_escrita; //entrada 4
+        Barramento *dado_lido_1; //saída 1
+        Barramento *dado_lido_2; //saída 2
+        Barramento *esc_reg; //sinal de controle
+
+        BancoReg(Barramento *reg_lido_1, Barramento *reg_lido_2, Barramento *reg_escrito, Barramento *dado_escrita, Barramento *dado_lido_1, Barramento *dado_lido_2, Barramento *esc_reg)
+            this->reg_lido_1 = reg_lido_1;
+            this->reg_lido_2 = reg_lido_2;
+            this->reg_escrito = reg_escrito;
+            this->dado_escrita = dado_escrita;
+            this->dado_lido_1 = dado_lido_1;
+            this->dado_lido_2 = dado_lido_2;
+            this->esc_reg = esc_reg;
+        )
+
+        void BuscaRegistrador {
+            auto res1 = banco_reg.find(reg_lido_1->valor);
+            auto res2 = banco_reg.find(reg_lido_2->valor);
+
+            if(res1 != banco_reg.end())  dado_lido_1 -> valor = res1->second;
+            if(res2 != banco_reg.end())  dado_lido_2 -> valor = res2->second;
+        }
+
+        void GravaRegistrador {
+            string sinal = esc_reg->valor;
+            if (sinal = "01")
+                banco_reg[reg_escrito->valor] = dado_escrita->valor;
+        }
+        
+    }
+
     Barramento CriaBarramento(string nome)
     {
         return Barramento(nome);
@@ -148,6 +183,11 @@ class Componentes
     Memoria CriaMemoria(Barramento *endereco, Barramento*instrucao, Barramento*dado, Barramento *ler_mem, Barramento *esc_mem)
     {
         return Memoria(endereco, instrucao, dado, ler_mem, esc_mem);
-
     }
+
+    BancoReg CriaBancoReg(Barramento *reg_lido_1, Barramento *reg_lido_2, Barramento *reg_escrito, Barramento *dado_escrita, Barramento *dado_lido_1, Barramento *dado_lido_2, Barramento *esc_reg) 
+    {    
+        return BancoReg(reg_lido_1, reg_lido_2, reg_escrito, dado_escrita, dado_lido_1, dado_lido_2, esc_reg);
+    }
+
 };
