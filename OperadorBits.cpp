@@ -63,20 +63,44 @@ static string OperaOr(string A, string B)
     }
     return result;
 }
-static string OperaAdd(string A, string B) //***incompleto***
+static string OperaAdd(string A, string B) 
 {
     if(A.length() != B.length()){
         return "Entradas de tamanhos diferentes!";
     }
-    string result;
-    for(int i=A.length()-1; i>=0; i--){
-         
-    }
-    return "";
+     string resp = ""; 
+    int s = 0;
+    int i = A.size() - 1, j = B.size() - 1; 
+    while (i >= 0 || j >= 0 || s == 1) 
+    {
+        s += ((i >= 0)? A[i] - '0': 0); 
+        s += ((j >= 0)? B[j] - '0': 0);
+        resp = char(s % 2 + '0') + resp;
+        s /= 2;
+        i--; j--; 
+    } 
+    return resp; 
 }
-static string OperaSub(string A, string B)
+static string OperaSub(string A, string B) //***incompleto***
 {
-    return "";
+    if(A.length() != B.length()){
+        return "Entradas de tamanhos diferentes!";
+    }
+    string resp;
+    for(int i=0; i<B.length(); i++){
+        if(B[i] == '1'){
+            B[i] = '0';
+        }else{
+            B[i] = '1';
+        }
+    }
+    B = OperaAdd(B, "1");
+    if(B.length()-A.length() != 0){
+       A = '0' + A;
+    }
+    return OperaAdd(A, B);
 }
-static string OperaSetOnLess(string A, string B){return "";}
+static string OperaSetOnLess(string A, string B){
+    
+    return "";}
 };
