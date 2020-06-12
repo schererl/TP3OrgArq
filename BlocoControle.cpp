@@ -85,7 +85,7 @@ class BlocoControle
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "11";
         atual->sinais[2] = ula_op;
-        atual->valores_sinais[2] = "11";
+        atual->valores_sinais[2] = "00";
         //***************Nodo 2*************//
         atual = &nodo_2;
         AlocaMemoria(nodo_2.numero_sinais, nodo_2.id_estado);
@@ -161,38 +161,28 @@ class BlocoControle
         
         
     }
+     
     
-    void ProximaInstrucao()
-    {
-        atual = &caminho_instrucao[index_caminho];
-        index_caminho++;
-        if(atual->id_estado == -1)
-        {
-            IniciaCaminho();
-        }
-        if(atual->id_estado == 1)
-        {
-            BuscaInstrucao();
-        }
-        AtualizaSinais();
-    }    
 
     void BuscaInstrucao()
     {
-
-    }
-
-    void IniciaCaminho()
-    {
-        cout << "nova instrução" << endl;
+        string opcode = opcode_instrucao->valor;
         free(caminho_instrucao);
-        index_caminho = 0;
-        caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
-        caminho_instrucao[0] = raiz;
-        caminho_instrucao[1] = nodo_1;
-        ProximaInstrucao();
+
+        if(opcode == "100011") CaminhoLoad();
+        
+        else if(opcode == "101011") CaminhoStore();
+        
+        else if(opcode == "000000") CaminhoTipoR();
+        
+        else if(opcode == "000100") CaminhoBranchEq();
+        
+        else if(opcode == "000010") CaminhoJump();
+        
+        //ProximaInstrucao();
     }
 
+    
     void CaminhoLoad()
     {
         caminho_instrucao = (Nodo*)malloc(4 * sizeof(Nodo));
@@ -202,6 +192,40 @@ class BlocoControle
         caminho_instrucao[2] = nodo_4;
         caminho_instrucao[3] = Nodo(-1, -1);
 
+    }
+
+    void CaminhoStore()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        index_caminho = 0;
+        caminho_instrucao[0] = nodo_2;
+        caminho_instrucao[1] = nodo_5;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
+
+    void CaminhoTipoR()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        index_caminho = 0;
+        caminho_instrucao[0] = nodo_6;
+        caminho_instrucao[1] = nodo_7;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
+
+    void CaminhoBranchEq()
+    {
+        caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
+        index_caminho = 0;
+        caminho_instrucao[0] = nodo_8;
+        caminho_instrucao[1] = Nodo(-1, -1);
+    }
+
+    void CaminhoJump()
+    {
+        caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
+        index_caminho = 0;
+        caminho_instrucao[0] = nodo_9;
+        caminho_instrucao[1] = Nodo(-1, -1);
     }
 
     void AtualizaSinais()
@@ -231,6 +255,7 @@ class BlocoControle
     Componentes::Barramento *flag_AND_PC_esc_cond;
     Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc;
 
+    Componentes::Barramento *opcode_instrucao;
     BlocoControle(Componentes::Barramento *pc_esc_cond, 
         Componentes::Barramento *pc_esc,
         Componentes::Barramento *i_ou_d,
@@ -245,7 +270,8 @@ class BlocoControle
         Componentes::Barramento *esc_reg,
         Componentes::Barramento *reg_dst,
         Componentes::Barramento *flag_AND_PC_esc_cond,
-        Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc
+        Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc,
+        Componentes::Barramento *opcode_instrucao
     )
     {
         
@@ -264,16 +290,38 @@ class BlocoControle
         this->reg_dst = reg_dst;
         this->flag_AND_PC_esc_cond = flag_AND_PC_esc_cond;
         this->flag_and_PC_esc_cond_OR_pc_sc = flag_and_PC_esc_cond_OR_pc_sc;
-       
+        this->opcode_instrucao = opcode_instrucao;
         CriaNodos();
         CaminhoLoad();
-        ProximaInstrucao();
-        ProximaInstrucao();
-        ProximaInstrucao();
-        ProximaInstrucao();
+        IniciaCaminho();
+    }
+
+    void IniciaCaminho()
+    {
+        free(caminho_instrucao);
+        index_caminho = 0;
+        caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
+        caminho_instrucao[0] = raiz;
+        caminho_instrucao[1] = nodo_1;
         ProximaInstrucao();
     }
 
+
+    void ProximaInstrucao()
+    {
+        atual = &caminho_instrucao[index_caminho];
+        index_caminho++;
+        if(atual->id_estado == -1)
+        { 
+            IniciaCaminho();
+            return;
+        }
+        else if(atual->id_estado == 1) {
+            BuscaInstrucao();
+            return;
+        }
+        AtualizaSinais();
+    }   
 };
 
 int main()
@@ -295,8 +343,15 @@ int main()
     Componentes::Barramento b13 = c.CriaBarramento("reg_dst");
     Componentes::Barramento b14 = c.CriaBarramento("flag_AND_PC_esc_cond");
     Componentes::Barramento b15 = c.CriaBarramento("flag_and_PC_esc_cond_OR_pc_sc");
-    BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &b14, &b15);
-   
+    
+    Componentes::Barramento instrucao = c.CriaBarramento("opcode_instrucao");
+    instrucao.valor = "100011"; 
+
+
+   BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &b14, &b15, &instrucao);
+   while(true)
+   {
+    
     cout << b1.nome << ": " << b1.valor << endl;
     cout << b2.nome << ": " << b2.valor << endl;
     cout << b3.nome << ": " << b3.valor << endl;
@@ -312,4 +367,17 @@ int main()
     cout << b13.nome << ": " << b13.valor << endl;
     cout << b14.nome << ": " << b14.valor << endl;
     cout << b15.nome << ": " << b15.valor << endl;
+    int n;
+    cin >> n;
+    
+    if(n == -1) break;
+    if(n == 2)
+    {
+        string str;
+        cin >> str;
+        instrucao.valor = str;
+    }
+    controle.ProximaInstrucao();
+
+   }
 }
