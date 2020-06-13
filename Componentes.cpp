@@ -78,7 +78,6 @@ class Componentes
             auto search = memoria.find(endereco->valor);
             if(search != memoria.end())  instrucao -> valor = search->second;
 
-
         }
 
         void GravaDado()
@@ -159,10 +158,33 @@ class Componentes
 
         void GravaRegistrador {
             string sinal = esc_reg->valor;
-            if (sinal = "01")
+            if (sinal = "1")
                 banco_reg[reg_escrito->valor] = dado_escrita->valor;
         }
         
+    }
+
+    struct Registrador {
+        Barramento *entrada;
+        Barramento *saida;
+        Barramento *controle;
+        Barramento *endereco;
+
+        Registrador(Barramento *entrada, Barramento *saida, Barramento *controle, Barramento *endereco) {
+            this->entrada = entrada;
+            this->saida = saida;
+            this->controle = controle;
+            this->endereco = endereco;
+        }
+
+        void BuscaReg {
+            auto busca = banco_reg.find(endereco->valor);
+            if(busca != banco_reg.end())  saida -> valor = busca->second;
+        }
+
+        void GravaRegistrador {
+                banco_reg[endereco->valor] = entrada->valor;
+        }
     }
 
     Barramento CriaBarramento(string nome)
@@ -188,6 +210,10 @@ class Componentes
     BancoReg CriaBancoReg(Barramento *reg_lido_1, Barramento *reg_lido_2, Barramento *reg_escrito, Barramento *dado_escrita, Barramento *dado_lido_1, Barramento *dado_lido_2, Barramento *esc_reg) 
     {    
         return BancoReg(reg_lido_1, reg_lido_2, reg_escrito, dado_escrita, dado_lido_1, dado_lido_2, esc_reg);
+    }
+
+    Registrador CriaRegistrador(Barramento *entrada, Barramento *saida, Barramento *controle, Barramento *endereco) {
+        return Registrador(entrada, saida, controle, endereco);
     }
 
 };
