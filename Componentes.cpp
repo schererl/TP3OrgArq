@@ -193,7 +193,7 @@ class Componentes
                     banco_reg[endereco->valor] = entrada->valor;
             }    
         }
-    }
+    };
 
     Barramento CriaBarramento(string nome)
     {
