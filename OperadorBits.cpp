@@ -1,4 +1,5 @@
 #include <string>
+#include <cmath>
 using namespace std;
 
 class OperadorBits
@@ -109,6 +110,31 @@ static string OperaSub(string A, string B) //***incompleto***
     return res;
 }
 static string OperaSetOnLess(string A, string B){
-    
-    return "";}
+    string resp = "0000000000000000000000000000000";
+    int alength = A.size();
+    int blength = B.size();
+    if(alength != blength){
+        return "Entradas de tamanhos diferentes!";
+    }
+    int adecimal = 0;
+    int bdecimal = 0;
+    int ai, bi;
+    for(int i=alength-1; i>=0; i--){
+        ai = A[i] - '0';
+        bi = B[i] - '0';
+        if(i != 0){
+            adecimal += ai * pow(2, alength-(i+1));
+            bdecimal += bi * pow(2, blength-(i+1));
+        }else{
+            adecimal -= ai * pow(2, alength-(i+1));
+            bdecimal -= bi * pow(2, blength-(i+1));
+        }
+    }
+    if(adecimal<bdecimal){
+        resp = resp + '1';
+    }else{
+        resp = resp + '0';
+    }
+    return resp;
+}
 };
