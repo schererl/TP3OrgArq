@@ -161,11 +161,7 @@ class Componentes
         void GravaRegistrador()
         {
             string sinal = esc_reg->valor;
-<<<<<<< HEAD
             if (sinal = "1")
-=======
-            if (sinal == "01")
->>>>>>> 4ff0605cbbb9a3170f647a8c9d838c1ce6a6e507
                 banco_reg[reg_escrito->valor] = dado_escrita->valor;
         }
 
@@ -182,7 +178,7 @@ class Componentes
             this->saida = saida;
             this->controle = controle;
             this->endereco = endereco;
-        }
+        };
 
         void BuscaReg {
             auto busca = banco_reg.find(endereco->valor);
@@ -190,7 +186,12 @@ class Componentes
         }
 
         void GravaRegistrador {
+            if(controle == NULL) {
                 banco_reg[endereco->valor] = entrada->valor;
+            }else{
+                if(controle->valor == 1)
+                    banco_reg[endereco->valor] = entrada->valor;
+            }    
         }
     }
 
