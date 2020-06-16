@@ -70,7 +70,8 @@ class Componentes
 
         void Operar()
         {
-
+            if(ler_mem->valor == "1") BuscaInstrucao();
+            if(esc_mem->valor == "1") GravaDado();
         }
 
         void BuscaInstrucao()
@@ -167,32 +168,69 @@ class Componentes
 
     };
 
-    struct Registrador {
+    //registradores invisíveis para salvar dados entre ciclos de relógio
+    struct RegistradorInvisivel {
+        string nome, codigo_registrador;
         Barramento *entrada;
         Barramento *saida;
         Barramento *controle;
-        Barramento *endereco;
-
-        Registrador(Barramento *entrada, Barramento *saida, Barramento *controle, Barramento *endereco) {
+        RegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) {
             this->entrada = entrada;
             this->saida = saida;
             this->controle = controle;
-            this->endereco = endereco;
+            this->codigo_registrador = codigo_registrador;
+            this-> nome = nome;
         };
 
-        void BuscaReg {
-            auto busca = banco_reg.find(endereco->valor);
+        void BuscaReg() {
+            auto busca = banco_reg.find(codigo_registrador);
             if(busca != banco_reg.end())  saida -> valor = busca->second;
         }
 
-        void GravaRegistrador {
+        void GravaRegistrador() {
             if(controle == NULL) {
                 banco_reg[endereco->valor] = entrada->valor;
             }else{
-                if(controle->valor == 1)
+                if(controle->valor == "1")
                     banco_reg[endereco->valor] = entrada->valor;
             }    
         }
+    };
+
+    //circuito combinacional que opera os bits
+    struct CircuitoBarramento
+    {
+        CircuitoBarramento(){}
+        //circuito de pc
+        void EntradaPC(Barramento *entrada_1, Barramento *entrada_2, Barramento *entrada_3, Barramento *saida)
+        {
+            string result_and, result_or;
+            result_and = OperadorBits::OperaAnd(entrada_1->valor, entrada_2->valor);
+            result_or = OperadorBits::OperaOr(entrada_3->pc_es, result_and);
+            saida->valor = result_or;
+        }
+
+        /* VERIRIFCAR ESTES DOIS CIRCUITOS  */
+        //circuito de deslocamento de bits
+        void DeslocametoBits(Barramento *entrada, Barramento *saida)
+        {
+            string valor = entrada->valor;
+        }
+
+        //circuito de extensao de sinal
+        void ExtensaoSinal(Barramento *entrada, Barramento *saida)
+        {
+            string valor = entrada->valor;
+            OperadorBits::ShiftLeft(&valor, 16);
+            saida -> valor = valor;
+        }
+
+        //circuito de operação da ULA
+        void OperacaoULA()
+        {
+
+        }
+
     };
 
     Barramento CriaBarramento(string nome)
@@ -220,8 +258,13 @@ class Componentes
         return BancoReg(reg_lido_1, reg_lido_2, reg_escrito, dado_escrita, dado_lido_1, dado_lido_2, esc_reg);
     }
 
-    Registrador CriaRegistrador(Barramento *entrada, Barramento *saida, Barramento *controle, Barramento *endereco) {
-        return Registrador(entrada, saida, controle, endereco);
+    Registrador CriaRegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) {
+        return RegistradorInvisivel(nome, entrada, saida, controle, codigo_registrador);
+    }
+
+    CircuitoBarramento CriaCircuitoBarramento()
+    {
+        return CircuitoBarramento();
     }
 
 };
