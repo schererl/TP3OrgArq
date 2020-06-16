@@ -79,26 +79,34 @@ static string OperaAdd(string A, string B)
         s /= 2;
         i--; j--; 
     } 
-    return resp; 
+    return resp;
 }
 static string OperaSub(string A, string B) //***incompleto***
 {
-    if(A.length() != B.length()){
+    int alength = A.size();
+    int blength = B.size();
+    string resp;
+    if(alength != blength){
         return "Entradas de tamanhos diferentes!";
     }
-    string resp;
-    for(int i=0; i<B.length(); i++){
-        if(B[i] == '1'){
-            B[i] = '0';
+    int adecimal = 0;
+    int bdecimal = 0;
+    int ai, bi;
+    for(int i=alength-1; i>=0; i--){
+        ai = A[i] - '0';
+        bi = B[i] - '0';
+        if(i != 0){
+            adecimal += ai * pow(2, alength-(i+1));
+            bdecimal += bi * pow(2, blength-(i+1));
         }else{
-            B[i] = '1';
+            adecimal -= ai * pow(2, alength-(i+1));
+            bdecimal -= bi * pow(2, blength-(i+1));
         }
     }
-    B = OperaAdd(B, "1");
-    if(B.length()-A.length() != 0){
-       A = '0' + A;
-    }
-    return OperaAdd(A, B);
+    int respint = adecimal - bdecimal;
+    char res[1000];
+    itoa(respint, res, 2);
+    return res;
 }
 static string OperaSetOnLess(string A, string B){
     
