@@ -49,7 +49,7 @@ static string OperaAnd(string A, string B)
     string result;
     /* VERIFICAR SE A OPERAÇÃO DA ULA FAZ ISSO
     for(int i=0; i<A.length(); i++){
-        if(A[i]=='1' || B[i]=='1'){
+        if(A[i]=='1' && B[i]=='1'){
             result += '1';
         }else{
             result += '0';
@@ -74,7 +74,7 @@ static string OperaOr(string A, string B)
     /*
     string result;
     for(int i=0; i<A.length(); i++){
-        if(A[i]=='1' && B[i]=='1'){
+        if(A[i]=='1' || B[i]=='1'){
             result += '1';
         }else{
             result += '0';
@@ -105,7 +105,7 @@ static string OperaAdd(string A, string B)
     } 
     return resp;
 }
-static string OperaSub(string A, string B) //***incompleto***
+static string OperaSub(string A, string B)
 {
     int alength = A.size();
     int blength = B.size();
