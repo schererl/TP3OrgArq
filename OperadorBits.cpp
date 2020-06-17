@@ -1,5 +1,8 @@
 #include <string>
 #include <cmath>
+#include <cstdlib>
+/*DESCOMENTAR SE FOR DEPURAR APENAS ESTA CLASSE*/
+//#include "BaseDados.cpp"
 using namespace std;
 
 class OperadorBits
@@ -66,6 +69,7 @@ static string OperaAnd(string A, string B)
     if(!tem_1) return "0";
     return "1";
 }
+
 static string OperaOr(string A, string B)
 {   
     if(A.length() != B.length()){
@@ -87,6 +91,7 @@ static string OperaOr(string A, string B)
     }
     return "1";
 }
+
 static string OperaAdd(string A, string B) 
 {
     if(A.length() != B.length()){
@@ -105,6 +110,7 @@ static string OperaAdd(string A, string B)
     } 
     return resp;
 }
+
 static string OperaSub(string A, string B)
 {
     int alength = A.size();
@@ -129,9 +135,10 @@ static string OperaSub(string A, string B)
     }
     int respint = adecimal - bdecimal;
     char res[1000];
-    itoa(respint, res, 2);
+    //atoi(respint, res, 2); nao ta funcionando
     return res;
 }
+
 static string OperaSetOnLess(string A, string B){
     string resp = "0000000000000000000000000000000";
     int alength = A.size();
@@ -160,4 +167,74 @@ static string OperaSetOnLess(string A, string B){
     }
     return resp;
 }
+
+static void sum_1(std::string &imediate)
+{
+    for(int i = imediate.size() - 1; i >= 0; i--)
+    {
+        if(imediate[i] == '0') 
+        {
+            imediate[i] = '1';
+            return;
+        }
+        else
+        {
+            imediate[i] = '0';
+        }
+    }
+}
+
+
+//hexadecial para binário
+static string HexaToBin(std::string hexa)
+{
+    string tmp;
+    string bin;
+    hexa = ReplaceAll(hexa, string("0x"), string("")); 
+        
+    for(char i: hexa)
+    {
+        tmp = i;
+        auto search = tb_hexa_bin.find(tmp); 
+        if(search != tb_hexa_bin.end()) 
+            bin =   bin + search->second;
+    }
+    return bin;
+
+}
+
+//binário para hexadecimal
+static string BinToHexa(string bin)
+{
+
+    string tmp_bin;
+    string hexa = "0x";
+    for(char i: bin) 
+    {
+        tmp_bin = tmp_bin + i;
+        if(tmp_bin.size() == 4)
+        {
+            auto search = tb_bin_hexa.find(tmp_bin); 
+            if(search != tb_bin_hexa.end()) 
+                hexa = hexa + search->second;
+            tmp_bin = "";   
+        }
+    
+        
+    }
+    return hexa;
+
+}
+
+//substitui numa string um conjunto de caracteres por outro
+static string ReplaceAll(string str, const string& from, const string& to) {
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); 
+    }
+    return str;
+}
+
+
 };

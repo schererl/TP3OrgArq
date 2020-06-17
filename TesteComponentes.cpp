@@ -1,9 +1,12 @@
+#include "BaseDados.cpp"
+#include "OperadorBits.cpp"
 #include "Componentes.cpp"
 #include <vector>
 #include <string>
 #include <iostream>
 
 using namespace std;
+
 void TestaCircuitoBarramento()
 {
     Componentes c;
@@ -53,9 +56,32 @@ void TestaCircuitoBarramento()
 
 }
 
+//le arquivo e popula memória com instruções e 
+void GeraMemoria(vector<string> instrucoes, vector<string> variaveis)
+{
+    string endereco_instrucao = "00400000";
+    string endereco_variaveis = "00100000";
+    
+    for(int i = 0;i < instrucoes.size();i++)
+    {
+        memoria[endereco_instrucao] = instrucoes[i];
+        OperadorBits::sum_1(endereco_instrucao); 
+    }
+    
+    for(int j = 0; j < variaveis.size(); j++)
+    {
+        memoria[endereco_variaveis] = endereco_variaveis;
+        OperadorBits::sum_1(endereco_variaveis);
+    }
+}
+
+
 int main()
 {
     TestaCircuitoBarramento();
+    vector<string> instr;
+    GeraMemoria(instr, instr);
+    
     /*
     Componentes c;
     

@@ -1,8 +1,10 @@
 #include <string>
 #include <stdlib.h>
 #include <map>
-#include "OperadorBits.cpp"
-#include "BaseDados.cpp"
+/*DESCOMENTAR SE FOR DEPURAR APENAS ESTA CLASSE*/
+//#include "BaseDados.cpp"
+//#include "OperadorBits.cpp"
+
 
 using namespace std;
 
