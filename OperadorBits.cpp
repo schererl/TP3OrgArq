@@ -135,8 +135,12 @@ static string OperaSub(string A, string B)
     }
     int respint = adecimal - bdecimal;
     char res[1000];
-    //atoi(respint, res, 2); nao ta funcionando
-    return res;
+    itoa(respint, res, 2);
+    resp = res;
+    while(resp.size()<32){
+        resp = '0' + resp;
+    }
+    return resp;
 }
 
 static string OperaSetOnLess(string A, string B){
