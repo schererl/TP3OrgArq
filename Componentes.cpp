@@ -162,7 +162,7 @@ class Componentes
         void GravaRegistrador()
         {
             string sinal = esc_reg->valor;
-            if (sinal = "1")
+            if (sinal == "1")
                 banco_reg[reg_escrito->valor] = dado_escrita->valor;
         }
 
@@ -189,15 +189,15 @@ class Componentes
 
         void GravaRegistrador() {
             if(controle == NULL) {
-                banco_reg[endereco->valor] = entrada->valor;
+                banco_reg[codigo_registrador] = entrada->valor;
             }else{
                 if(controle->valor == "1")
-                    banco_reg[endereco->valor] = entrada->valor;
+                    banco_reg[codigo_registrador] = entrada->valor;
             }    
         }
     };
 
-    //circuito combinacional que opera os bits
+    //Operacoes de bits nos barramentos
     struct CircuitoBarramento
     {
         CircuitoBarramento(){}
@@ -206,7 +206,7 @@ class Componentes
         {
             string result_and, result_or;
             result_and = OperadorBits::OperaAnd(entrada_1->valor, entrada_2->valor);
-            result_or = OperadorBits::OperaOr(entrada_3->pc_es, result_and);
+            result_or = OperadorBits::OperaOr(entrada_3->valor, result_and);
             saida->valor = result_or;
         }
 
@@ -215,20 +215,59 @@ class Componentes
         void DeslocametoBits(Barramento *entrada, Barramento *saida)
         {
             string valor = entrada->valor;
+            OperadorBits::ShiftLeft(valor, 2);
+            saida -> valor = valor;
         }
 
         //circuito de extensao de sinal
+        //TODO
         void ExtensaoSinal(Barramento *entrada, Barramento *saida)
         {
             string valor = entrada->valor;
-            OperadorBits::ShiftLeft(&valor, 16);
+            OperadorBits::ShiftLeft(valor, 16);
             saida -> valor = valor;
         }
 
         //circuito de operação da ULA
+        //TODO
         void OperacaoULA()
         {
 
+        }
+
+        /* avaliar esta separação */
+        //buscar pelo shamt
+        //implementar barramento de salto incondicional
+        void SeparaInstrucao(Barramento *instrucao, Barramento *reg_lido_1, Barramento *reg_lido_2, Barramento *reg_destino, Barramento *imediato, Barramento *op_code, Barramento *funct)
+        {
+            string buffer_binario = instrucao->valor;
+            string op_code_valor, reg_lido_1_valor, reg_lido_2_valor, reg_destino_valor, imediato_valor, funct_valor;
+            op_code_valor = OperadorBits::ExtrairBinario(buffer_binario, 0, 6);
+            reg_lido_1_valor = OperadorBits::ExtrairBinario(buffer_binario, 6, 5);
+            reg_lido_2_valor = OperadorBits::ExtrairBinario(buffer_binario, 11, 5);
+            reg_destino_valor = OperadorBits::ExtrairBinario(buffer_binario, 16, 5);
+            imediato_valor = OperadorBits::ExtrairBinario(buffer_binario, 16, 16);
+            funct_valor = OperadorBits::ExtrairBinario(buffer_binario, 26, 6);
+
+            op_code -> valor = op_code_valor;
+            reg_lido_1 -> valor = reg_lido_1_valor;
+            reg_lido_2 -> valor = reg_lido_2_valor;
+            reg_destino -> valor = reg_destino_valor;
+            imediato -> valor = imediato_valor; 
+            funct -> valor = funct_valor;
+        }
+
+        void BifurcaPC(Barramento *pc, Barramento *pc_truncado)
+        {
+            string bin_pc = pc->valor;
+            OperadorBits::Trunc(bin_pc, 4);
+            pc_truncado->valor = bin_pc;
+        }
+
+    
+        void ConcatenaPCSalto(Barramento *pc_truncado, Barramento *endereco_salto, Barramento *saida)
+        {
+            saida->valor = endereco_salto->valor + pc_truncado->valor;
         }
 
     };
@@ -258,7 +297,7 @@ class Componentes
         return BancoReg(reg_lido_1, reg_lido_2, reg_escrito, dado_escrita, dado_lido_1, dado_lido_2, esc_reg);
     }
 
-    Registrador CriaRegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) {
+    RegistradorInvisivel CriaRegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) {
         return RegistradorInvisivel(nome, entrada, saida, controle, codigo_registrador);
     }
 

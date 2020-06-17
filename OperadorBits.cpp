@@ -6,6 +6,7 @@ class OperadorBits
 
 
 public:
+/*
 //move os N primeiros bits de entrada para o parâmetro de saída (remove esses bits do binário de entrada)
 static void ExtrairBinario(string &binario_entrada, string &binario_saida, int numero_bits)
 {
@@ -18,11 +19,17 @@ static void ExtrairBinario(string &binario_entrada, string &binario_saida, int n
     }
     binario_entrada.erase(0, numero_bits);
 }
+*/
+static string ExtrairBinario(string binario_entrada, int pos_inicial, int numero_bits)
+{
+    return binario_entrada.substr(pos_inicial, numero_bits);
+}
 
 //shift dos binário
 static void ShiftLeft(string &binario, int numero_shifts)
 {
-    while(binario.size() < binario.size() + numero_shifts) binario = binario + "0";
+    int size = binario.size() + numero_shifts;
+    while(binario.size() < size) binario = binario + "0";
 }
 
 //trunca binário
@@ -39,6 +46,7 @@ static string OperaAnd(string A, string B)
         return "Entradas de tamanhos diferentes!";
     }
     string result;
+    /* VERIFICAR SE A OPERAÇÃO DA ULA FAZ ISSO
     for(int i=0; i<A.length(); i++){
         if(A[i]=='1' || B[i]=='1'){
             result += '1';
@@ -47,12 +55,22 @@ static string OperaAnd(string A, string B)
         }
     }
     return result;
+    */
+   /*VERIFICAR ISSO*/
+   bool tem_1 = false;
+   for(int i=0; i<A.length(); i++){
+        if(! ((A[i] == '1' && B[i] == '1') || (A[i] == '0' && B[i] == '0'))) return "0";
+        if(A[i] == '1' || B[i] == '1') tem_1 = true;
+    }
+    if(!tem_1) return "0";
+    return "1";
 }
 static string OperaOr(string A, string B)
 {   
     if(A.length() != B.length()){
         return "Entradas de tamanhos diferentes!";
     }
+    /*
     string result;
     for(int i=0; i<A.length(); i++){
         if(A[i]=='1' && B[i]=='1'){
@@ -62,6 +80,11 @@ static string OperaOr(string A, string B)
         }
     }
     return result;
+    */
+    for(int i=0; i<A.length(); i++){
+        if(A[i] == '0' && B[i] == '0') return "0";
+    }
+    return "1";
 }
 static string OperaAdd(string A, string B) 
 {

@@ -4,9 +4,61 @@
 #include <iostream>
 
 using namespace std;
-int main()
+void TestaCircuitoBarramento()
 {
     Componentes c;
+    Componentes::Barramento b1 = c.CriaBarramento("Barramento 1");
+    Componentes::Barramento b2 = c.CriaBarramento("Barramento 2");
+    Componentes::Barramento b3 = c.CriaBarramento("Barramento 3");
+    Componentes::Barramento b4 = c.CriaBarramento("Barramento 4");
+    Componentes::Barramento b5 = c.CriaBarramento("Barramento 5");
+    Componentes::Barramento b6 = c.CriaBarramento("Barramento 6");
+    Componentes::Barramento b7 = c.CriaBarramento("Barramento 7");
+    Componentes::CircuitoBarramento cb = c.CriaCircuitoBarramento();
+    
+    /*ENTRADA DE PC ok*/
+    b1.valor = "1";
+    b2.valor = "1";
+    b3.valor = "0";
+    cout << "sinal de controle pc: " << b4.valor << endl;
+    cb.EntradaPC(&b1, &b2, &b3, &b4);
+    cout << "valor atualizado: " << b4.valor << endl;
+    
+
+    /*DESLOCA A ESQUERDA BITS ok*/
+    b1.valor = "111";
+    cb.DeslocametoBits(&b1, &b2);
+    cout << "\nteste shift left: " << b1.valor << endl;
+    cout << "valor atualizado: " << b2.valor << endl;
+
+    /*TESTE SEPARAÇÃO INSTRUÇÕES ok*/
+    //250cfff4
+    //0010 0101 0000 1100 1111 1111 1111 0100
+    b1.valor = "123456789abcdefghijklmnopqrstuvw";
+    cb.SeparaInstrucao(&b1, &b2, &b3, &b4, &b5, &b6, &b7);
+    cout << "op_code: " << b6.valor << endl;
+    cout << "registrador lido 1: " << b2.valor << endl;
+    cout << "registrador lido 2: " << b3.valor << endl; 
+    cout << "registrador destino: " << b4.valor << endl;
+    cout << "imediato: " << b5.valor << endl;
+    cout << "funct: " << b7.valor << endl;
+
+    
+    /*BIFURCA PC: última a ser testado*/
+    /*
+    b1.valor = "00000000010000000000110101110111";
+    cout << "bifurca pc: " < b1.valor << endl;
+    cb.BifurcaPC(&b1, &b2);
+    */
+
+}
+
+int main()
+{
+    TestaCircuitoBarramento();
+    /*
+    Componentes c;
+    
     cout << "********BARRAMENTOS******" << endl;
     //cria barramentos
     Componentes::Barramento b1 = c.CriaBarramento("Barramento 1");
@@ -45,6 +97,7 @@ int main()
     cout << bsesc_mem.nome << endl;
     cout << bsle_mem.nome << endl;
 
+    
     //cria multiplexador e memória
     int numero_barramentos = 2;
     Componentes::Barramento *b = (Componentes::Barramento*)malloc(numero_barramentos * sizeof(Componentes::Barramento));
@@ -71,14 +124,8 @@ int main()
     b_mux_entrada_b[3] = b_saida_desl_esq_2;
     Componentes::Multiplexador m = c.CriaMultiplexador("Multiplexador Entrada B", b_mux_entrada_b, &b_saida_reg_B, numero_barramentos, &b_sinal_mux_B);
 
-
-
-
-
-
     //cria memória
     Componentes::Memoria mem = c.CriaMemoria(&bs, &binst, &bdado, &bsesc_mem, &bsle_mem);
-
 
 
     //Cria ULA
@@ -96,6 +143,7 @@ int main()
     cout << "sinal de saida do multiplexador: " << bs.valor << endl;
     mem.BuscaInstrucao();
     cout << "busca por instrucao: " << binst.valor << endl;
+    */
 
 
 }
