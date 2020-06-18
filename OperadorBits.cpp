@@ -53,11 +53,7 @@ static void Trunc(string &binario, int bits_cortados)
 //Operações da ULA
 static string OperaAnd(string A, string B)
 {   
-    if(A.length() != B.length()){
-        return "Entradas de tamanhos diferentes!";
-    }
     string result;
-    /* VERIFICAR SE A OPERAÇÃO DA ULA FAZ ISSO
     for(int i=0; i<A.length(); i++){
         if(A[i]=='1' && B[i]=='1'){
             result += '1';
@@ -65,24 +61,11 @@ static string OperaAnd(string A, string B)
             result += '0';
         }
     }
-    return result;
-    */
-   /*VERIFICAR ISSO*/
-   bool tem_1 = false;
-   for(int i=0; i<A.length(); i++){
-        if(! ((A[i] == '1' && B[i] == '1') || (A[i] == '0' && B[i] == '0'))) return "0";
-        if(A[i] == '1' || B[i] == '1') tem_1 = true;
-    }
-    if(!tem_1) return "0";
-    return "1";
+    return result; 
 }
 
 static string OperaOr(string A, string B)
 {   
-    if(A.length() != B.length()){
-        return "Entradas de tamanhos diferentes!";
-    }
-    /*
     string result;
     for(int i=0; i<A.length(); i++){
         if(A[i]=='1' || B[i]=='1'){
@@ -91,12 +74,7 @@ static string OperaOr(string A, string B)
             result += '0';
         }
     }
-    return result;
-    */
-    for(int i=0; i<A.length(); i++){
-        if(A[i] == '0' && B[i] == '0') return "0";
-    }
-    return "1";
+    return result; 
 }
 
 static string OperaAdd(string A, string B) 
