@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <math.h>  
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -16,22 +16,21 @@
 using namespace std;
 class BlocoControle
 {
-    
     struct Nodo
     {
         int id_estado, numero_sinais;
         Componentes::Barramento **sinais;
         string* valores_sinais;
-        Nodo(int id_estado, int numero_sinais){ 
-            
-            this->id_estado = id_estado; 
+        Nodo(int id_estado, int numero_sinais){
+
+            this->id_estado = id_estado;
             this->numero_sinais = numero_sinais;
             }
         Nodo(){}
-        
-        
-    }; 
-    
+
+
+    };
+
     Nodo raiz = Nodo(0, 8);
     Nodo nodo_1 = Nodo(1, 3);
     Nodo nodo_2 = Nodo(2, 3);
@@ -46,15 +45,15 @@ class BlocoControle
     Nodo *atual;
     Nodo *caminho_instrucao;
     int index_caminho;
-    
+
     void AlocaMemoria(int num_elementos, int index)
     {
-        
+
         atual->sinais = (Componentes::Barramento **)malloc(num_elementos * sizeof(Componentes::Barramento*));
         for(int i = 0; i < num_elementos;i++) atual->sinais[i] = (Componentes::Barramento*)malloc(1 * sizeof(Componentes::Barramento));
         atual->valores_sinais = (string *)malloc(num_elementos * sizeof(string));
     }
-    
+
 
     void CriaNodos()
     {
@@ -157,12 +156,12 @@ class BlocoControle
         atual->sinais[0] = pc_esc;
         atual->valores_sinais[0] = "1";
         atual->sinais[1] = fonte_pc;
-        atual->valores_sinais[1] = "10"; 
-        
-        
+        atual->valores_sinais[1] = "10";
+
+
     }
-     
-    
+
+
 
     void BuscaInstrucao()
     {
@@ -170,19 +169,19 @@ class BlocoControle
         free(caminho_instrucao);
 
         if(opcode == "100011") CaminhoLoad();
-        
+
         else if(opcode == "101011") CaminhoStore();
-        
+
         else if(opcode == "000000") CaminhoTipoR();
-        
+
         else if(opcode == "000100") CaminhoBranchEq();
-        
+
         else if(opcode == "000010") CaminhoJump();
-        
+
         //ProximaInstrucao();
     }
 
-    
+
     void CaminhoLoad()
     {
         caminho_instrucao = (Nodo*)malloc(4 * sizeof(Nodo));
@@ -230,14 +229,14 @@ class BlocoControle
 
     void AtualizaSinais()
     {
-        
+
         for(int i = 0; i < atual->numero_sinais;i++)
         {
             atual->sinais[i]->valor = atual->valores_sinais[i];
         }
-        
+
     }
-    
+
     public:
     Componentes::Barramento *pc_esc_cond;
     Componentes::Barramento *pc_esc;
@@ -256,7 +255,7 @@ class BlocoControle
     Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc;
 
     Componentes::Barramento *opcode_instrucao;
-    BlocoControle(Componentes::Barramento *pc_esc_cond, 
+    BlocoControle(Componentes::Barramento *pc_esc_cond,
         Componentes::Barramento *pc_esc,
         Componentes::Barramento *i_ou_d,
         Componentes::Barramento *ler_mem,
@@ -274,7 +273,7 @@ class BlocoControle
         Componentes::Barramento *opcode_instrucao
     )
     {
-        
+
         this->pc_esc_cond = pc_esc_cond;
         this->pc_esc = pc_esc;
         this->i_ou_d = i_ou_d;
@@ -312,7 +311,7 @@ class BlocoControle
         atual = &caminho_instrucao[index_caminho];
         index_caminho++;
         if(atual->id_estado == -1)
-        { 
+        {
             IniciaCaminho();
             return;
         }
@@ -321,13 +320,13 @@ class BlocoControle
             return;
         }
         AtualizaSinais();
-    }   
+    }
 };
 
 int main()
 {
     Componentes c;
-    
+
     Componentes::Barramento b1 = c.CriaBarramento("pc_esc_cond");
     Componentes::Barramento b2 = c.CriaBarramento("pc_esc");
     Componentes::Barramento b3 = c.CriaBarramento("i_ou_d");
@@ -343,15 +342,15 @@ int main()
     Componentes::Barramento b13 = c.CriaBarramento("reg_dst");
     Componentes::Barramento b14 = c.CriaBarramento("flag_AND_PC_esc_cond");
     Componentes::Barramento b15 = c.CriaBarramento("flag_and_PC_esc_cond_OR_pc_sc");
-    
+
     Componentes::Barramento instrucao = c.CriaBarramento("opcode_instrucao");
-    instrucao.valor = "100011"; 
+    instrucao.valor = "100011";
 
 
    BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &b14, &b15, &instrucao);
    while(true)
    {
-    
+
     cout << b1.nome << ": " << b1.valor << endl;
     cout << b2.nome << ": " << b2.valor << endl;
     cout << b3.nome << ": " << b3.valor << endl;
@@ -369,7 +368,7 @@ int main()
     cout << b15.nome << ": " << b15.valor << endl;
     int n;
     cin >> n;
-    
+
     if(n == -1) break;
     if(n == 2)
     {
