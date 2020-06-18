@@ -122,7 +122,12 @@ class Componentes
 
 
             saida -> valor = resultado; 
-            zero -> valor = resultado; //MUDAR
+
+            if(resultado == "00000000000000000000000000000000") 
+                zero -> valor = "1"; //MUDAR
+            else
+                zero -> valor = "0";
+            
         }
 
 

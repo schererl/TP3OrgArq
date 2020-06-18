@@ -20,9 +20,9 @@ void TestaCircuitoBarramento()
     Componentes::CircuitoBarramento cb = c.CriaCircuitoBarramento();
     
     /*ENTRADA DE PC ok*/
-    b1.valor = "1";
-    b2.valor = "1";
-    b3.valor = "0";
+    b1.valor = "0";
+    b2.valor = "0";
+    b3.valor = "1";
     cout << "sinal de controle pc: " << b4.valor << endl;
     cb.EntradaPC(&b1, &b2, &b3, &b4);
     cout << "valor atualizado: " << b4.valor << endl;
@@ -82,8 +82,8 @@ void TestaULA()
     
     cout << "******SOMA != TIPO-R*********" << endl;
     
-    b1.valor = "00000000000000000000000000000111";
-    b2.valor = "00000000000000000000000000000100";
+    b1.valor = "00000000000000000000000000001101";
+    b2.valor = "00000000000000000000000000010101";
     b6.valor = "00";
     b7.valor = "100010";
     cb.OperacaoULA(&b6, &b7,&b5);
@@ -99,6 +99,17 @@ void TestaULA()
     ula.Operar();
     cout << "aluop " << b5.valor << endl;
     cout << "saida " << b3.valor << endl;
+    cout << "flag " << b4.valor << endl;
+
+    cout << "******TIPO-R*********" << endl;
+    b6.valor = "10";
+    b7.valor = "101010";
+    cb.OperacaoULA(&b6, &b7,&b5);
+    ula.Operar();
+    cout << "aluop " << b5.valor << endl;
+    cout << "saida " << b3.valor << endl;
+    cout << "flag " << b4.valor << endl;
+
 }
 
 
@@ -124,11 +135,11 @@ void GeraMemoria(vector<string> instrucoes, vector<string> variaveis)
 
 int main()
 {
-    TestaULA();
     
-    //TestaCircuitoBarramento();
-    //vector<string> instr;
-    //GeraMemoria(instr, instr);
+    //TestaULA();
+    TestaCircuitoBarramento();
+    vector<string> instr;
+    GeraMemoria(instr, instr);
     
 
 
