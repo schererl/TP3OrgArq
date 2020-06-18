@@ -24,10 +24,6 @@ class Componentes
 
     struct Multiplexador
     {
-        //entrada: A B C D E
-        //sinal de control: 0
-        //saida: entrada[0]
-
         string nome;
         Barramento *entrada;  //vetor de barramentos de entradas
         int numero_entradas;  //numero de barramentos de entradas
@@ -125,8 +121,8 @@ class Componentes
                 resultado = OperadorBits::OperaSetOnLess(entradaA->valor, entradaB->valor);
 
 
-            saida -> valor = resultado;
-            zero -> valor = resultado;
+            saida -> valor = resultado; 
+            zero -> valor = resultado; //MUDAR
         }
 
 
@@ -225,47 +221,38 @@ class Componentes
         //TODO
         void ExtensaoSinal(Barramento *entrada, Barramento *saida)
         {
-            string valor = entrada->valor;
-            OperadorBits::ShiftLeft(valor, 16);
+            string valor = OperadorBits::ExtendeBits(entrada->valor, 16);
             saida -> valor = valor;
         }
 
         //circuito de operação da ULA
         //TODO                                 //verificar//
-        void OperacaoULA(Barramento *opcode, Barramento *funct, Barramento Barramento *saida)
+        void OperacaoULA(Barramento *sinal_controle, Barramento *funct, Barramento *saida)
         {
-            string op = opcode->valor;
-            string f = funct->valor;
-            string ALUOp, ALUinput;
+            string valor_sinal_controle = sinal_controle->valor;
+            string valor_funct = funct->valor;
+            string valor_saida;
 
-            switch (op) {
-                case "100011":  // lw
-                    ALUOp = "00";
-                case "101011": // sw
-                    ALUOp = "00";
-                case "000100": //beq
-                    ALUOp = "01";
-                case "000000": //tipo R
-                    ALUOp = "10";
+            
+            if(valor_sinal_controle == "00")
+            {
+                valor_saida  = "010";
             }
-
-            saida->valor = ALUOp;
-
-            if (ALUOp = "10") {
-                switch (f) {
-                    case "100000":
-                        ALUinput = "010";
-                    case "100010":
-                        ALUinput = "110";
-                    case "100100":
-                        ALUinput = "000";
-                    case "100101":
-                        ALUinput = "001";
-                    case "101010":
-                        ALUinput = "111";
-                }
-                saida->valor = ALUinput;
+            else if(valor_sinal_controle == "01")
+            {
+                valor_saida = "110";
             }
+            else if (valor_sinal_controle == "10") {
+                
+                if(valor_funct == "100000") valor_saida = "010";
+                else if(valor_funct == "100010") valor_saida = "110";
+                else if(valor_funct == "100100") valor_saida = "000";
+                else if(valor_funct == "100101") valor_saida = "001";
+                else if(valor_funct == "101010") valor_saida = "111";
+                
+                
+            }
+            saida->valor = valor_saida;
          }
 
         /* avaliar esta separação */
@@ -330,7 +317,8 @@ class Componentes
         return BancoReg(reg_lido_1, reg_lido_2, reg_escrito, dado_escrita, dado_lido_1, dado_lido_2, esc_reg);
     }
 
-    RegistradorInvisivel CriaRegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) {
+    RegistradorInvisivel CriaRegistradorInvisivel(string nome, Barramento *entrada, Barramento *saida, Barramento *controle, string codigo_registrador) 
+    {
         return RegistradorInvisivel(nome, entrada, saida, controle, codigo_registrador);
     }
 

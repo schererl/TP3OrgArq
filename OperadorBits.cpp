@@ -1,6 +1,6 @@
 #include <string>
 #include <cmath>
-#include <cstdlib>
+#include <bitset>
 /*DESCOMENTAR SE FOR DEPURAR APENAS ESTA CLASSE*/
 //#include "BaseDados.cpp"
 using namespace std;
@@ -27,6 +27,13 @@ static void ExtrairBinario(string &binario_entrada, string &binario_saida, int n
 static string ExtrairBinario(string binario_entrada, int pos_inicial, int numero_bits)
 {
     return binario_entrada.substr(pos_inicial, numero_bits);
+}
+
+static string ExtendeBits(string binario_entrada, int numero_bits)
+{
+    char bit_m_significativo = binario_entrada[0];
+    for(int i = 0; i < numero_bits;i++) binario_entrada = bit_m_significativo + binario_entrada;
+    return binario_entrada; 
 }
 
 //shift dos binário
@@ -134,9 +141,11 @@ static string OperaSub(string A, string B)
         }
     }
     int respint = adecimal - bdecimal;
-    char res[1000];
-    itoa(respint, res, 2);
-    resp = res;
+    //char res[1000];
+    //itoa(respint, res, 2);
+    //resp = res;
+    resp = bitset<32>(respint).to_string();
+    
     while(resp.size()<32){
         resp = '0' + resp;
     }

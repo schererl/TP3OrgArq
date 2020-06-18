@@ -34,7 +34,7 @@ void TestaCircuitoBarramento()
     cout << "\nteste shift left: " << b1.valor << endl;
     cout << "valor atualizado: " << b2.valor << endl;
 
-    /*TESTE SEPARAÇÃO INSTRUÇÕES ok*/
+    /* SEPARAÇÃO INSTRUÇÕES ok*/
     //250cfff4
     //0010 0101 0000 1100 1111 1111 1111 0100
     b1.valor = "123456789abcdefghijklmnopqrstuvw";
@@ -46,7 +46,14 @@ void TestaCircuitoBarramento()
     cout << "imediato: " << b5.valor << endl;
     cout << "funct: " << b7.valor << endl;
 
+    /*  EXTENDE SINAL ok*/
+    b1.valor =  "1010010100101111";
+    cb.ExtensaoSinal(&b1, &b2);
+    cout << b2.valor << endl;
+    cout << b2.valor.size() << endl;
     
+    /* CONCATENA PC */
+
     /*BIFURCA PC: última a ser testado*/
     /*
     b1.valor = "00000000010000000000110101110111";
@@ -55,6 +62,45 @@ void TestaCircuitoBarramento()
     */
 
 }
+
+void TestaULA()
+{
+
+    Componentes c;
+    Componentes::Barramento b1 = c.CriaBarramento("Barramento 1");
+    Componentes::Barramento b2 = c.CriaBarramento("Barramento 2");
+    Componentes::Barramento b3 = c.CriaBarramento("Barramento 3"); //saida
+    Componentes::Barramento b4 = c.CriaBarramento("Barramento 4"); //flag
+    Componentes::Barramento b5 = c.CriaBarramento("Barramento 5"); //aluop
+    Componentes::Barramento b6 = c.CriaBarramento("Barramento 6"); //sinal_controle
+    Componentes::Barramento b7 = c.CriaBarramento("Barramento 7"); //funct
+    
+    Componentes::CircuitoBarramento cb = c.CriaCircuitoBarramento();
+    Componentes::ULA ula = c.CriaULA("ula", &b1, &b2, &b3, &b4, &b5);
+    
+    //* testa soma sem tipo-r *//
+    
+    cout << "******SOMA != TIPO-R*********" << endl;
+    
+    b1.valor = "00000000000000000000000000000111";
+    b2.valor = "00000000000000000000000000000100";
+    b6.valor = "00";
+    b7.valor = "100010";
+    cb.OperacaoULA(&b6, &b7,&b5);
+    ula.Operar();
+    cout << "aluop " << b5.valor << endl;
+    cout << "saida " << b3.valor << endl;
+
+    
+    cout << "******SUB != TIPO-R*********" << endl;
+    b6.valor = "01";
+    b7.valor = "100010";
+    cb.OperacaoULA(&b6, &b7,&b5);
+    ula.Operar();
+    cout << "aluop " << b5.valor << endl;
+    cout << "saida " << b3.valor << endl;
+}
+
 
 //le arquivo e popula memória com instruções e 
 void GeraMemoria(vector<string> instrucoes, vector<string> variaveis)
@@ -78,10 +124,14 @@ void GeraMemoria(vector<string> instrucoes, vector<string> variaveis)
 
 int main()
 {
-    TestaCircuitoBarramento();
-    vector<string> instr;
-    GeraMemoria(instr, instr);
+    TestaULA();
     
+    //TestaCircuitoBarramento();
+    //vector<string> instr;
+    //GeraMemoria(instr, instr);
+    
+
+
     /*
     Componentes c;
     
