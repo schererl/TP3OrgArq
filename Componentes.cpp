@@ -231,11 +231,42 @@ class Componentes
         }
 
         //circuito de operação da ULA
-        //TODO
-        void OperacaoULA()
+        //TODO                                 //verificar//
+        void OperacaoULA(Barramento *opcode, Barramento *funct, Barramento Barramento *saida)
         {
+            string op = opcode->valor;
+            string f = funct->valor;
+            string ALUOp, ALUinput;
 
-        }
+            switch (op) {
+                case "100011":  // lw
+                    ALUOp = "00";
+                case "101011": // sw
+                    ALUOp = "00";
+                case "000100": //beq
+                    ALUOp = "01";
+                case "000000": //tipo R
+                    ALUOp = "10";
+            }
+
+            saida->valor = ALUOp;
+
+            if (ALUOp = "10") {
+                switch (f) {
+                    case "100000":
+                        ALUinput = "010";
+                    case "100010":
+                        ALUinput = "110";
+                    case "100100":
+                        ALUinput = "000";
+                    case "100101":
+                        ALUinput = "001";
+                    case "101010":
+                        ALUinput = "111";
+                }
+                saida->valor = ALUinput;
+            }
+         }
 
         /* avaliar esta separação */
         //buscar pelo shamt
