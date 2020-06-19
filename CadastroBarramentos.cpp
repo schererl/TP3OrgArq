@@ -54,4 +54,11 @@ class CadastroBarramentos{
     Componentes::Barramento b_saida_ula = c.CriaBarramento("Barramento do Registrador de Saída da Ula");
 
 
+    Componentes::Multiplexador m_pc_memoria = c.CriaMultiplexador("Mux de entrada para memória", entradas, saida, 2, louD);
+    Componentes::Multiplexador m_instr_bancoreg = c.CriaMultiplexador("Mux de registrador a ser escrito", entradas, saida, 2, RegDst);
+    Componentes::Multiplexador m_dadomem_bancoreg = c.CriaMultiplexador("Mux de dado para escrita em reg", entradas, saida, 2, MemParaReg);
+    Componentes::Multiplexador m_fonte_ula_1 = c.CriaMultiplexador("Mux de 1º fonte para ULA", entradas, saida, 2, ULAFonteA);
+    Componentes::Multiplexador m_fonte_ula_2 = c.CriaMultiplexador("Mux de 2º fonte para ULA", entradas, saida, 4, ULAFonteB);
+    Componentes::Multiplexador m_ula_pc = c.CriaMultiplexador("Mux para a p´roxima instrução", entradas, saida, 3, ULAOp);
+
 };
