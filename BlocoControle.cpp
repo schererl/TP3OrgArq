@@ -1,18 +1,8 @@
-#include "Componentes.cpp"
 #include <string>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <string.h>
 using namespace std;
 class BlocoControle
 {
@@ -251,8 +241,6 @@ class BlocoControle
     Componentes::Barramento *ula_fonte_a;
     Componentes::Barramento *esc_reg;
     Componentes::Barramento *reg_dst;
-    Componentes::Barramento *flag_AND_PC_esc_cond;
-    Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc;
 
     Componentes::Barramento *opcode_instrucao;
     BlocoControle(Componentes::Barramento *pc_esc_cond,
@@ -268,8 +256,6 @@ class BlocoControle
         Componentes::Barramento *ula_fonte_a,
         Componentes::Barramento *esc_reg,
         Componentes::Barramento *reg_dst,
-        Componentes::Barramento *flag_AND_PC_esc_cond,
-        Componentes::Barramento *flag_and_PC_esc_cond_OR_pc_sc,
         Componentes::Barramento *opcode_instrucao
     )
     {
@@ -287,8 +273,6 @@ class BlocoControle
         this->ula_fonte_a = ula_fonte_a;
         this->esc_reg = esc_reg;
         this->reg_dst = reg_dst;
-        this->flag_AND_PC_esc_cond = flag_AND_PC_esc_cond;
-        this->flag_and_PC_esc_cond_OR_pc_sc = flag_and_PC_esc_cond_OR_pc_sc;
         this->opcode_instrucao = opcode_instrucao;
         CriaNodos();
         CaminhoLoad();
@@ -323,6 +307,7 @@ class BlocoControle
     }
 };
 
+/*
 int main()
 {
     Componentes c;
@@ -347,7 +332,7 @@ int main()
     instrucao.valor = "100011";
 
 
-   BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &b14, &b15, &instrucao);
+   BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &instrucao);
    while(true)
    {
 
@@ -379,4 +364,6 @@ int main()
     controle.ProximaInstrucao();
 
    }
+   
 }
+*/

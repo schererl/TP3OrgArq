@@ -25,15 +25,13 @@ class Componentes
     struct Multiplexador
     {
         string nome;
-        Barramento *entrada;  //vetor de barramentos de entradas
-        int numero_entradas;  //numero de barramentos de entradas
+        Barramento *entrada;
         Barramento *saida;
         Barramento *escolhe_entrada;
-        Multiplexador(string nome, Barramento *entrada, Barramento *saida, int numero_entradas, Barramento *escolhe_entrada)//escolhe entrada é o sinal de seleção
+        Multiplexador(string nome, Barramento *entrada, Barramento *saida, Barramento *escolhe_entrada)//escolhe entrada é o sinal de seleção
         {
             this->nome = nome;
             this->entrada = entrada;
-            this->numero_entradas = numero_entradas;
             this->saida = saida;
             this->escolhe_entrada = escolhe_entrada;
 
@@ -42,8 +40,20 @@ class Componentes
         //define o valor de saída
         void DefineSaida()
         {
-            string valor_saida = this->entrada[stoi(this->escolhe_entrada->valor)].valor;
+            string valor_saida = this->entrada[IndiceEntrada()].valor;
             this->saida->valor = valor_saida;
+        }
+
+        int IndiceEntrada()
+        {
+            string buff =this->escolhe_entrada->valor;
+            if (buff.size() < 2) buff =  "0" + buff;
+
+            if(buff == "00") return 0;
+            else if(buff == "01") return 1;
+            else if(buff == "10") return 2;
+            else if(buff == "11") return 3;
+            else return -1;
         }
     };
 
@@ -87,7 +97,6 @@ class Componentes
 
     struct ULA
     {
-        string nome;
         Barramento *entradaA;
         Barramento *entradaB;
         Barramento *zero;
@@ -95,9 +104,8 @@ class Componentes
         Barramento *aluop;
 
 
-        ULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
+        ULA(Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
         {
-            this->nome = nome;
             this->entradaA = entradaA;
             this->entradaB = entradaB;
             this->saida = saida;
@@ -302,14 +310,14 @@ class Componentes
         return Barramento(nome);
     }
 
-    Multiplexador CriaMultiplexador(string nome, Barramento *entrada, Barramento *saida, int numero_entradas, Barramento *escolhe_entrada)
+    Multiplexador CriaMultiplexador(string nome, Barramento *entrada, Barramento *saida, Barramento *escolhe_entrada)
     {
-        return Multiplexador(nome, entrada, saida, numero_entradas, escolhe_entrada);
+        return Multiplexador(nome, entrada, saida, escolhe_entrada);
     }
 
-    ULA CriaULA(string nome, Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
+    ULA CriaULA(Barramento *entradaA, Barramento *entradaB, Barramento *saida, Barramento *zero, Barramento *aluop)
     {
-        return ULA(nome, entradaA, entradaB, saida, zero, aluop);
+        return ULA(entradaA, entradaB, saida, zero, aluop);
     }
 
     Memoria CriaMemoria(Barramento *endereco, Barramento*instrucao, Barramento*dado, Barramento *ler_mem, Barramento *esc_mem)

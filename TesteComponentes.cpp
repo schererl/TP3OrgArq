@@ -143,7 +143,7 @@ int main()
     
 
 
-    /*
+    
     Componentes c;
     
     cout << "********BARRAMENTOS******" << endl;
@@ -184,13 +184,13 @@ int main()
     cout << bsesc_mem.nome << endl;
     cout << bsle_mem.nome << endl;
 
-    
+    /*
     //cria multiplexador e memória
     int numero_barramentos = 2;
     Componentes::Barramento *b = (Componentes::Barramento*)malloc(numero_barramentos * sizeof(Componentes::Barramento));
     b[0] = b1;
     b[1] = b2;
-    Componentes::Multiplexador m1 = c.CriaMultiplexador("Multiplexador 1", b, &bs, numero_barramentos, &bsm);
+    Componentes::Multiplexador m1 = c.CriaMultiplexador("Multiplexador 1", b, &bs, &bsm);
 
 
     //cria multiplexador
@@ -201,16 +201,23 @@ int main()
     b_mux_entrada_a[1] = b_incrementa_pc_4;
     Componentes::Multiplexador mux_entrada_a = c.CriaMultiplexador("Multiplexador Entrada A", b_mux_entrada_a, &b_saida_reg_A, numero_barramentos, &b_sinal_mux_A);
 
-
+*/
     //cria multiplexador
-    numero_barramentos = 4;
-    Componentes::Barramento *b_mux_entrada_b = (Componentes::Barramento*)malloc(numero_barramentos * sizeof(Componentes::Barramento));
-    b_mux_entrada_b[0] = b_saida_reg_B;
-    b_mux_entrada_b[1] = b_incrementa_pc_4;
-    b_mux_entrada_b[2] = b_saida_sign_ext;
-    b_mux_entrada_b[3] = b_saida_desl_esq_2;
-    Componentes::Multiplexador m = c.CriaMultiplexador("Multiplexador Entrada B", b_mux_entrada_b, &b_saida_reg_B, numero_barramentos, &b_sinal_mux_B);
-
+    int numero_barramentos = 2;
+    Componentes::Barramento **b_mux_entrada_b = (Componentes::Barramento**)malloc(numero_barramentos * sizeof(Componentes::Barramento*));
+    for(int i = 0; i < 2;i++) b_mux_entrada_b[i] = (Componentes::Barramento*)malloc(1 * sizeof(Componentes::Barramento));
+    
+    b_mux_entrada_b[0] = &b_saida_reg_B;
+    b_mux_entrada_b[1] = &b_incrementa_pc_4;
+    Componentes::Multiplexador m = c.CriaMultiplexador("Multiplexador Entrada B", *b_mux_entrada_b, &b1, &b_sinal_mux_B);
+    b_sinal_mux_B.valor = "0";
+    b_saida_reg_B.valor =  "testando referencia A";
+    m.DefineSaida();
+    //cout << b_saida_reg_B.valor << endl;
+    //cout << b_mux_entrada_b[0]->valor << endl;
+    cout << b1.valor << endl;
+    
+    /*
     //cria memória
     Componentes::Memoria mem = c.CriaMemoria(&bs, &binst, &bdado, &bsesc_mem, &bsle_mem);
 
@@ -231,6 +238,7 @@ int main()
     mem.BuscaInstrucao();
     cout << "busca por instrucao: " << binst.valor << endl;
     */
+    
 
 
 }
