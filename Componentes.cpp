@@ -1,5 +1,8 @@
 #include <string>
 #include <stdlib.h>
+#include <iostream>
+#include <stdio.h>
+
 #include <map>
 /*DESCOMENTAR SE FOR DEPURAR APENAS ESTA CLASSE*/
 //#include "BaseDados.cpp"
@@ -15,20 +18,26 @@ class Componentes
     {
         string nome;
         string valor;
-        Barramento(string nome)
+        Barramento(string nome, int tamanho)
         {
             this->nome = nome;
-            this->valor = "0x000000";
+            this->valor = "0";
+            OperadorBits::AdjustBin(valor, tamanho);
+        }
+
+        void Imprime()
+        {
+            cout << valor << endl;
         }
     };
 
     struct Multiplexador
     {
         string nome;
-        Barramento *entrada;
+        Barramento **entrada;
         Barramento *saida;
         Barramento *escolhe_entrada;
-        Multiplexador(string nome, Barramento *entrada, Barramento *saida, Barramento *escolhe_entrada)//escolhe entrada é o sinal de seleção
+        Multiplexador(string nome, Barramento **entrada, Barramento *saida, Barramento *escolhe_entrada)//escolhe entrada é o sinal de seleção
         {
             this->nome = nome;
             this->entrada = entrada;
@@ -38,12 +47,29 @@ class Componentes
         }
 
         //define o valor de saída
-        void DefineSaida()
+        void Opera()
         {
-            string valor_saida = this->entrada[IndiceEntrada()].valor;
+            string valor_saida = entrada[IndiceEntrada()]->valor;
             this->saida->valor = valor_saida;
         }
+    
+        void Imprime()
+        {
+            cout << "******\n" << nome << endl;
+            cout << "entrada escolhida: "; escolhe_entrada->Imprime();
+            cout << "saida: "; saida->Imprime() ; 
+        }
+        
+        void ImprimeEntradas(int n)
+        {
+            for(int i = 0; i < n;i++)
+            {
+                cout << "ENTRADA " << i << ": " << entrada[i]->nome << endl;
+            }
 
+
+        }
+        
         int IndiceEntrada()
         {
             string buff =this->escolhe_entrada->valor;
@@ -56,7 +82,6 @@ class Componentes
             else return -1;
         }
     };
-
 
     struct Memoria
     {
@@ -76,7 +101,7 @@ class Componentes
             this->esc_mem = esc_mem;
         }
 
-        void Operar()
+        void Opera()
         {
             if(ler_mem->valor == "1") BuscaInstrucao();
             if(esc_mem->valor == "1") GravaDado();
@@ -84,14 +109,24 @@ class Componentes
 
         void BuscaInstrucao()
         {
-            auto search = memoria.find(endereco->valor);
-            if(search != memoria.end())  instrucao -> valor = search->second;
+            auto search = memoria.find(OperadorBits::BinToHexa(endereco->valor));
+            if(search != memoria.end())  instrucao -> valor = OperadorBits::HexaToBin(search->second);
 
         }
 
         void GravaDado()
         {
-            memoria[endereco->valor] = dado->valor;
+            memoria[OperadorBits::BinToHexa(endereco->valor)] = OperadorBits::BinToHexa(dado->valor);
+        }
+
+        void Imprime()
+        {
+            cout << "****\nMemoria" << endl;
+            cout << "endereço entrada: "; endereco->Imprime();
+            cout << "sinal de leitura de memória: "; ler_mem->Imprime();
+            cout << "sinal de escrita de memória: "; esc_mem->Imprime();
+            cout << "valor de dado as ser escrito: "; dado->Imprime();
+            cout << "instrução de saída: "; instrucao->Imprime();
         }
     };
 
@@ -113,7 +148,7 @@ class Componentes
             this->aluop = aluop;
         }
 
-        void Operar()
+        void Opera()
         {
             string resultado;
             string op = aluop->valor;
@@ -138,6 +173,15 @@ class Componentes
             
         }
 
+        void Imprime()
+        {
+            cout << "********\nULA" << endl;
+            cout << "entrada A: "; entradaA->Imprime();
+            cout << "entrada B: "; entradaB->Imprime();
+            cout << "aluop: "; aluop->Imprime();
+            cout << "saida: "; saida->Imprime();
+            cout << "zero: "; zero->Imprime();
+        }
 
     };
 
@@ -161,20 +205,51 @@ class Componentes
             this->esc_reg = esc_reg;
         }
 
+        void Opera()
+        {
+            if(esc_reg->valor == "1") GravaRegistrador();
+            BuscaRegistrador();
+        }
+
         void BuscaRegistrador()
         {
-            auto res1 = banco_reg.find(reg_lido_1->valor);
-            auto res2 = banco_reg.find(reg_lido_2->valor);
+            string buffer_bin = reg_lido_1->valor;
+            OperadorBits::AdjustBin(buffer_bin, 32);
 
-            if(res1 != banco_reg.end())  dado_lido_1 -> valor = res1->second;
-            if(res2 != banco_reg.end())  dado_lido_2 -> valor = res2->second;
+            string buffer_bin2 = reg_lido_2->valor;
+            OperadorBits::AdjustBin(buffer_bin2, 32);
+
+            auto res1 = banco_reg.find(OperadorBits::BinToHexa(buffer_bin));
+            auto res2 = banco_reg.find(OperadorBits::BinToHexa(buffer_bin2));
+
+            if(res1 != banco_reg.end())  dado_lido_1 -> valor = OperadorBits::HexaToBin(res1->second);
+            if(res2 != banco_reg.end())  dado_lido_2 -> valor = OperadorBits::HexaToBin(res2->second);
         }
 
         void GravaRegistrador()
         {
             string sinal = esc_reg->valor;
+
+
             if (sinal == "1")
-                banco_reg[reg_escrito->valor] = dado_escrita->valor;
+            {
+                string buffer_bin = reg_escrito->valor;
+                OperadorBits::AdjustBin(buffer_bin, 8);
+                banco_reg[OperadorBits::BinToHexa(buffer_bin)] = dado_escrita->valor;
+            }
+        }
+
+        void Imprime()
+        {
+            cout << "******\nBANCO DE REGISTRADORES" << endl;
+            cout << "registrador lido 1: "; reg_lido_1->Imprime();
+            cout << "registrador lido 2: "; reg_lido_2->Imprime();
+            cout << "registrador escrito: "; reg_escrito->Imprime();
+            cout << "dado escrito: "; dado_escrita->Imprime();
+            cout << "dado lido 1: "; dado_lido_1->Imprime();
+            cout << "dado lido 2: "; dado_lido_2->Imprime();
+            cout << "sinal escrita registrador: "; esc_reg->Imprime();
+            
         }
 
     };
@@ -193,18 +268,50 @@ class Componentes
             this-> nome = nome;
         };
 
+        void Opera()
+        {
+            BuscaReg();
+            GravaRegistrador();
+            
+        }
+
         void BuscaReg() {
             auto busca = banco_reg.find(codigo_registrador);
-            if(busca != banco_reg.end())  saida -> valor = busca->second;
+            string tmp;
+            if(busca != banco_reg.end())  /*saida -> valor*/tmp = OperadorBits::HexaToBin(busca->second);
+            saida -> valor = tmp;
         }
 
         void GravaRegistrador() {
             if(controle == NULL) {
-                banco_reg[codigo_registrador] = entrada->valor;
+                banco_reg[codigo_registrador] = OperadorBits::BinToHexa(entrada->valor);
+                //BuscaReg();
             }else{
-                if(controle->valor == "1")
-                    banco_reg[codigo_registrador] = entrada->valor;
+                if(controle->valor == "1"){
+                    banco_reg[codigo_registrador] = OperadorBits::BinToHexa(entrada->valor);
+                    //BuscaReg();
+                }
             }    
+        }
+
+        void Imprime()
+        {
+            cout << "*****\nRegistrador invisível " << nome << endl;
+            cout << "entrada: "; entrada->Imprime();
+            
+            if(controle != NULL)
+            {
+                cout << "sinal de controle: "; controle->Imprime();
+            }
+            cout << "grava valor em: " << codigo_registrador << endl;
+            cout << "saida: "; saida->Imprime();
+
+            auto busca = banco_reg.find(codigo_registrador);
+            string tmp;
+            if(busca != banco_reg.end())  cout << "valor no registrador: " << (busca->second) << endl;
+            
+
+            
         }
     };
 
@@ -225,6 +332,7 @@ class Componentes
         //circuito de deslocamento de bits
         void DeslocametoBits(Barramento *entrada, Barramento *saida)
         {
+
             string valor = entrada->valor;
             OperadorBits::ShiftLeft(valor, 2);
             saida -> valor = valor;
@@ -305,12 +413,12 @@ class Componentes
 
     };
 
-    Barramento CriaBarramento(string nome)
+    Barramento CriaBarramento(string nome, int numero_bits)
     {
-        return Barramento(nome);
+        return Barramento(nome, numero_bits);
     }
 
-    Multiplexador CriaMultiplexador(string nome, Barramento *entrada, Barramento *saida, Barramento *escolhe_entrada)
+    Multiplexador CriaMultiplexador(string nome, Barramento **entrada, Barramento *saida, Barramento *escolhe_entrada)
     {
         return Multiplexador(nome, entrada, saida, escolhe_entrada);
     }

@@ -40,7 +40,24 @@ static string ExtendeBits(string binario_entrada, int numero_bits)
 static void ShiftLeft(string &binario, int numero_shifts)
 {
     int size = binario.size() + numero_shifts;
-    while(binario.size() < size) binario = binario + "0";
+    int cont = 0;
+    if(binario.size() == 32)
+    {
+        while(cont < numero_shifts) 
+        {
+            binario[cont] = '0';
+            cont++;
+        }
+    }
+    else
+    { 
+        
+        for(int i = 0; i < numero_shifts;i++)
+        {
+            binario += '0';
+            cont++;
+        }
+    }
 }
 
 //trunca binário
@@ -182,14 +199,20 @@ static string HexaToBin(std::string hexa)
     string tmp;
     string bin;
     hexa = ReplaceAll(hexa, string("0x"), string("")); 
-        
-    for(char i: hexa)
+    for(int i = 0;i < hexa.size(); i++)//for(char i: hexa)
     {
-        tmp = i;
+        tmp = hexa[i];
         auto search = tb_hexa_bin.find(tmp); 
         if(search != tb_hexa_bin.end()) 
-            bin =   bin + search->second;
+        {
+            string b =  search->second ;
+            bin += b;
+        }
+        else cout << "erro no elemento: " << i << " = " << hexa[i] << endl;
+        
+        
     }
+    
     return bin;
 
 }
@@ -227,5 +250,16 @@ static string ReplaceAll(string str, const string& from, const string& to) {
     return str;
 }
 
+//trunca ou extende o binário com zeros
+static void AdjustBin(std::string &bin, int command_size)
+{
+    if(bin.size() > command_size) bin.erase(0, bin.size() - command_size);
+    
+    else if(bin.size() < command_size)
+    {
+        while(bin.size() < command_size) bin = "0" + bin; 
 
+    }
+
+}
 };

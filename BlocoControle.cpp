@@ -34,6 +34,7 @@ class BlocoControle
 
     Nodo *atual;
     Nodo *caminho_instrucao;
+    Nodo auxiliar;
     int index_caminho;
 
     void AlocaMemoria(int num_elementos, int index)
@@ -151,31 +152,22 @@ class BlocoControle
 
     }
 
-
-
-    void BuscaInstrucao()
+    void ZeraSinais()
     {
-        string opcode = opcode_instrucao->valor;
-        free(caminho_instrucao);
-
-        if(opcode == "100011") CaminhoLoad();
-
-        else if(opcode == "101011") CaminhoStore();
-
-        else if(opcode == "000000") CaminhoTipoR();
-
-        else if(opcode == "000100") CaminhoBranchEq();
-
-        else if(opcode == "000010") CaminhoJump();
-
-        //ProximaInstrucao();
+        ler_mem->valor = "0";
+        ir_esc->valor = "0";
+        pc_esc->valor = "0";
+        ler_mem->valor = "0";
+        esc_reg->valor = "0";
+        esc_mem->valor = "0";
+        pc_esc_cond->valor = "0";
+        pc_esc->valor = "0";
     }
 
 
     void CaminhoLoad()
     {
         caminho_instrucao = (Nodo*)malloc(4 * sizeof(Nodo));
-        index_caminho = 0;
         caminho_instrucao[0] = nodo_2;
         caminho_instrucao[1] = nodo_3;
         caminho_instrucao[2] = nodo_4;
@@ -186,7 +178,6 @@ class BlocoControle
     void CaminhoStore()
     {
         caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
-        index_caminho = 0;
         caminho_instrucao[0] = nodo_2;
         caminho_instrucao[1] = nodo_5;
         caminho_instrucao[2] = Nodo(-1, -1);
@@ -195,7 +186,6 @@ class BlocoControle
     void CaminhoTipoR()
     {
         caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
-        index_caminho = 0;
         caminho_instrucao[0] = nodo_6;
         caminho_instrucao[1] = nodo_7;
         caminho_instrucao[2] = Nodo(-1, -1);
@@ -204,7 +194,6 @@ class BlocoControle
     void CaminhoBranchEq()
     {
         caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
-        index_caminho = 0;
         caminho_instrucao[0] = nodo_8;
         caminho_instrucao[1] = Nodo(-1, -1);
     }
@@ -212,7 +201,6 @@ class BlocoControle
     void CaminhoJump()
     {
         caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
-        index_caminho = 0;
         caminho_instrucao[0] = nodo_9;
         caminho_instrucao[1] = Nodo(-1, -1);
     }
@@ -220,9 +208,9 @@ class BlocoControle
     void AtualizaSinais()
     {
 
-        for(int i = 0; i < atual->numero_sinais;i++)
+        for(int i = 0; i < auxiliar.numero_sinais;i++)
         {
-            atual->sinais[i]->valor = atual->valores_sinais[i];
+            auxiliar.sinais[i]->valor = auxiliar.valores_sinais[i];
         }
 
     }
@@ -275,13 +263,12 @@ class BlocoControle
         this->reg_dst = reg_dst;
         this->opcode_instrucao = opcode_instrucao;
         CriaNodos();
-        CaminhoLoad();
         IniciaCaminho();
     }
 
     void IniciaCaminho()
     {
-        free(caminho_instrucao);
+        //free(caminho_instrucao);
         index_caminho = 0;
         caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
         caminho_instrucao[0] = raiz;
@@ -292,18 +279,60 @@ class BlocoControle
 
     void ProximaInstrucao()
     {
-        atual = &caminho_instrucao[index_caminho];
+        ZeraSinais();
+        //atual = caminho_instrucao[index_caminho];
+        auxiliar = caminho_instrucao[index_caminho];
         index_caminho++;
-        if(atual->id_estado == -1)
+        if(auxiliar.id_estado == -1)
         {
             IniciaCaminho();
             return;
         }
-        else if(atual->id_estado == 1) {
+        /*
+        else if(auxiliar.id_estado == 1) {
+            
+            cout<< "INSTRUÇÃO ATUAL: " << auxiliar.id_estado << endl;
             BuscaInstrucao();
-            return;
+            //return;
         }
+        */
         AtualizaSinais();
+        
+    }
+
+
+    void BuscaInstrucao()
+    {
+        if(auxiliar.id_estado != 1) return;
+        
+        string opcode = opcode_instrucao->valor;
+        free(caminho_instrucao);
+        index_caminho = 0;
+        if(opcode == "100011") CaminhoLoad();
+
+        else if(opcode == "101011") CaminhoStore();
+
+        else if(opcode == "000000") CaminhoTipoR();
+
+        else if(opcode == "000100") CaminhoBranchEq();
+
+        else if(opcode == "000010") CaminhoJump();
+
+        //else IniciaCaminho();
+        //ProximaInstrucao();
+    }
+
+    
+    void Imprime()
+    {
+        cout << "\n=======================================================================\nestado atual: " << auxiliar.id_estado << endl;
+        cout << "sinais atualizados: " << auxiliar.numero_sinais << endl;
+        for(int i = 0; i < auxiliar.numero_sinais;i++)
+        {
+            cout << auxiliar.sinais[i]->nome << " = " << auxiliar.valores_sinais[i] << endl;
+        }
+        cout << "PROXIMA INSTRUÇÃO: " << caminho_instrucao[index_caminho].id_estado << endl;
+        
     }
 };
 
