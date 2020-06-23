@@ -176,10 +176,16 @@ static string OperaSetOnLess(string A, string B){
     return resp;
 }
 
-//TODO
 static string OperaXor(string A, string B)
 {
-    return "";
+    string resp;
+    for(int i=0; i<A.length(); i++){
+        if(A[i]==B[i])
+            resp += '0';
+        else
+            resp += '1';
+    }
+    return resp;
 }
 
 //TODO
