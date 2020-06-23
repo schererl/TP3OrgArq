@@ -22,7 +22,7 @@ class Componentes
         {
             this->nome = nome;
             this->valor = "0";
-            OperadorBits::AdjustBin(valor, tamanho);
+            OperadorBits::AdjustBin(valor, tamanho); //inicializa o barramento zerado com o tamanho passado por parâmetro
         }
 
         void Imprime()
@@ -103,15 +103,15 @@ class Componentes
 
         void Opera()
         {
-            if(ler_mem->valor == "1") BuscaInstrucao();
+            if(ler_mem->valor == "1") BuscaDado();
             if(esc_mem->valor == "1") GravaDado();
         }
 
-        void BuscaInstrucao()
+        void BuscaDado()
         {
             auto search = memoria.find(OperadorBits::BinToHexa(endereco->valor));
             if(search != memoria.end())  instrucao -> valor = OperadorBits::HexaToBin(search->second);
-
+            else { cout << "**erro endereço não localizado na memória: " << OperadorBits::BinToHexa(endereco->valor) << endl;}
         }
 
         void GravaDado()
@@ -150,6 +150,8 @@ class Componentes
 
         void Opera()
         {
+            /*falta shift left e shift right*/
+
             string resultado;
             string op = aluop->valor;
             if(op == "000")
@@ -162,7 +164,9 @@ class Componentes
                 resultado = OperadorBits::OperaSub(entradaA->valor, entradaB->valor);
             else if(op == "111")
                 resultado = OperadorBits::OperaSetOnLess(entradaA->valor, entradaB->valor);
-
+            //else if sll
+            //else if srl
+            //else if xor talvez
 
             saida -> valor = resultado; 
 
@@ -234,7 +238,7 @@ class Componentes
             if (sinal == "1")
             {
                 string buffer_bin = reg_escrito->valor;
-                OperadorBits::AdjustBin(buffer_bin, 8);
+                OperadorBits::AdjustBin(buffer_bin, 8); //TODO::VERIFICAR AQUI
                 banco_reg[OperadorBits::BinToHexa(buffer_bin)] = dado_escrita->valor;
             }
         }
@@ -357,11 +361,11 @@ class Componentes
             
             if(valor_sinal_controle == "00")
             {
-                valor_saida  = "010";
+                valor_saida  = "010"; //executa soma
             }
             else if(valor_sinal_controle == "01")
             {
-                valor_saida = "110";
+                valor_saida = "110"; //beq subtração
             }
             else if (valor_sinal_controle == "10") {
                 
@@ -370,9 +374,15 @@ class Componentes
                 else if(valor_funct == "100100") valor_saida = "000";
                 else if(valor_funct == "100101") valor_saida = "001";
                 else if(valor_funct == "101010") valor_saida = "111";
+                //000000 sll
+                //000010 srl
                 
                 
             }
+            //ori 111 -> or bit a bit
+            //lui 011 -> soma 
+            //addiu 101 -> soma
+
             saida->valor = valor_saida;
          }
 

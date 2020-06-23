@@ -187,6 +187,7 @@ int main()
     bloco_controle.Imprime();
     
     r_pc.BuscaReg();
+    r_ula.BuscaReg();
     
     
     cb.BifurcaPC(&b_pc_out, &b_trunca_pc);
@@ -202,7 +203,9 @@ int main()
     r_instrucao.Imprime();
     
     
-    r_dado.Opera();
+    //r_dado.Opera();
+    r_dado.BuscaReg();
+    r_dado.GravaRegistrador();
     r_dado.Imprime();
     
     
@@ -232,15 +235,19 @@ int main()
     m_fonte_ula_1.Imprime();
     m_fonte_ula_2.Opera();
     m_fonte_ula_2.Imprime();
-    //m_fonte_ula_2.ImprimeEntradas(4);
+    m_fonte_ula_2.ImprimeEntradas(4);
     cout << "aluop: " << b_ula_op.valor << endl;
     cb.OperacaoULA(&b_ula_op, &b_funct, &b_controle_ula_op);
     cout << "aluo controle: " << b_controle_ula_op.valor << endl;
     ula.Opera();
     ula.Imprime();
     //r_ula.Opera();
-    r_ula.BuscaReg();
+    
+    
+    //TAVA AQUI O R_ULA.BUSCAREG: ALTEREI PQ NA ETAPA 3 R_ULA GUARDA O ENDEREÇO DO DADO A SER GRAVADO NO REGISTRADOR
     r_ula.GravaRegistrador();
+    
+    
     r_ula.Imprime();
     
     //define pc
