@@ -188,18 +188,51 @@ static string OperaXor(string A, string B)
     return resp;
 }
 
-//TODO
 static string OperaShiftLeft(string A, string B)
 {
-    //observação: pode chamar aqui a função Shift left que já existe MAS B tem que ser convertido para inteiro
-    return "";
+    int blength = B.size();
+    int shamt = 0;
+    int bi; 
+    for(int i=blength-1; i>=0; i--){
+        bi = B[i] - '0';
+        if(i != 0){
+            shamt += bi * pow(2, blength-(i+1));
+        }else{
+            shamt -= bi * pow(2, blength-(i+1));
+        }
+    }
+    for(int i=0; i<A.length(); i++){
+        if(A[i] == '1' && (i-shamt >= 0)){
+            A[i-shamt] = A[i];
+            A[i] = '0';
+        }
+    }
+    return A;
 }
 
-//TODO
+
 static string OperaShiftRight(string A, string B)
 {
-    //observação: pode criar um método pareceido com o Shift left
-    return "";
+    int blength = B.size();
+    int shamt = 0;
+    int bi; 
+    for(int i=blength-1; i>=0; i--){
+        bi = B[i] - '0';
+        if(i != 0){
+            shamt += bi * pow(2, blength-(i+1));
+        }else{
+            shamt -= bi * pow(2, blength-(i+1));
+        }
+    }
+    for(int i=A.length()-1; i>=0; i--){
+        if(A[i] == '1'){
+            if(i+shamt < A.length()){
+                A[i+shamt] = A[i];
+            }           
+            A[i] = '0';
+        }
+    }
+    return A;
 }
 
 static void sum_1(std::string &imediate)
