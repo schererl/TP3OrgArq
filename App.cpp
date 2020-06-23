@@ -135,7 +135,7 @@ int main()
     Componentes::Multiplexador m_define_pc = c.CriaMultiplexador("Mux para a proxima instrução", vb_define_pc, &b_pc_in, &b_fonte_pc);
     
     //** MEMORIA **/
-    Componentes::Memoria memoria = c.CriaMemoria(&b_mem_in, &b_mem_out, &b_saida_r_ula, &b_ler_mem, &b_esc_mem);
+    Componentes::Memoria memoria = c.CriaMemoria(&b_mem_in, &b_mem_out, &b_saida_reg_B, &b_ler_mem, &b_esc_mem);
 
     //** BANCO REGISTRADORES **/
     Componentes::BancoReg banco_registradores = c.CriaBancoReg(&b_reg_in_1, &b_reg_in_2, &b_reg_escr_out, &b_dado_escr_reg_in, &b_entrada_reg_A, &b_entrada_reg_B, &b_esc_reg);
@@ -188,7 +188,8 @@ int main()
     
     r_pc.BuscaReg();
     r_ula.BuscaReg();
-    
+    r_A.BuscaReg();
+    r_B.BuscaReg();
     
     cb.BifurcaPC(&b_pc_out, &b_trunca_pc);
     
@@ -225,9 +226,9 @@ int main()
     //acesso ao banco de registradores
     banco_registradores.Opera();
     banco_registradores.Imprime();
-    r_A.Opera();
+    r_A.GravaRegistrador();
     r_A.Imprime();
-    r_B.Opera();
+    r_B.GravaRegistrador();
     r_B.Imprime();
 
     //opera ula

@@ -154,16 +154,25 @@ class Componentes
 
             string resultado;
             string op = aluop->valor;
-            if(op == "000")
+            if(op == "0000")
                 resultado = OperadorBits::OperaAnd(entradaA->valor, entradaB->valor);
-            else if(op == "001")
+            else if(op == "0001")
                 resultado = OperadorBits::OperaOr(entradaA->valor, entradaB->valor);
-            else if(op == "010")
+            else if(op == "0010")
                 resultado = OperadorBits::OperaAdd(entradaA->valor, entradaB->valor);
-            else if(op == "110")
+            else if(op == "0110")
                 resultado = OperadorBits::OperaSub(entradaA->valor, entradaB->valor);
-            else if(op == "111")
+            else if(op == "0111")
                 resultado = OperadorBits::OperaSetOnLess(entradaA->valor, entradaB->valor);
+            else if( op == "0011")
+                resultado = OperadorBits::OperaXor(entradaA->valor, entradaB->valor);
+            else if( op == "1000")
+                resultado = OperadorBits::OperaShiftLeft(entradaA->valor, entradaB->valor);
+            else
+            {
+                cout << "**ERRO OPERAÇÃO DE ULA NÃO DEFINIDA" << endl;
+            }
+            
             //else if sll
             //else if srl
             //else if xor talvez
@@ -237,9 +246,9 @@ class Componentes
 
             if (sinal == "1")
             {
-                string buffer_bin = reg_escrito->valor;
-                OperadorBits::AdjustBin(buffer_bin, 8); //TODO::VERIFICAR AQUI
-                banco_reg[OperadorBits::BinToHexa(buffer_bin)] = dado_escrita->valor;
+                string buff_bin = reg_escrito->valor;
+                OperadorBits::AdjustBin(buff_bin, 32); //TODO::VERIFICAR AQUI
+                banco_reg[OperadorBits::BinToHexa(buff_bin)] = OperadorBits::BinToHexa(dado_escrita->valor);
             }
         }
 
@@ -361,24 +370,28 @@ class Componentes
             
             if(valor_sinal_controle == "00")
             {
-                valor_saida  = "010"; //executa soma
+                valor_saida  = "0010"; //executa soma
             }
             else if(valor_sinal_controle == "01")
             {
-                valor_saida = "110"; //beq subtração
+                valor_saida = "0110"; //beq subtração
             }
             else if (valor_sinal_controle == "10") {
                 
-                if(valor_funct == "100000") valor_saida = "010";
-                else if(valor_funct == "100010") valor_saida = "110";
-                else if(valor_funct == "100100") valor_saida = "000";
-                else if(valor_funct == "100101") valor_saida = "001";
-                else if(valor_funct == "101010") valor_saida = "111";
+                if(valor_funct == "100000") valor_saida = "0010";
+                else if(valor_funct == "100010") valor_saida = "0110";
+                else if(valor_funct == "100100") valor_saida = "0000";
+                else if(valor_funct == "100101") valor_saida = "0001";
+                else if(valor_funct == "101010") valor_saida = "0111";
+                else if(valor_funct == "100110") valor_saida = "0011";
+                else if(valor_funct == "000000") valor_saida = "1000"; 
+                else{ cout << "**ERRO: funct não identificado " << valor_funct << endl;}
                 //000000 sll
                 //000010 srl
                 
                 
             }
+            else{ cout << "**ERRO: sinal de controle não identificado " << valor_sinal_controle << endl;}
             //ori 111 -> or bit a bit
             //lui 011 -> soma 
             //addiu 101 -> soma

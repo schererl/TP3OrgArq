@@ -176,6 +176,26 @@ static string OperaSetOnLess(string A, string B){
     return resp;
 }
 
+//TODO
+static string OperaXor(string A, string B)
+{
+    return "";
+}
+
+//TODO
+static string OperaShiftLeft(string A, string B)
+{
+    //observação: pode chamar aqui a função Shift left que já existe MAS B tem que ser convertido para inteiro
+    return "";
+}
+
+//TODO
+static string OperaShiftRight(string A, string B)
+{
+    //observação: pode criar um método pareceido com o Shift left
+    return "";
+}
+
 static void sum_1(std::string &imediate)
 {
     for(int i = imediate.size() - 1; i >= 0; i--)
