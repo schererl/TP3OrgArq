@@ -31,6 +31,11 @@ class BlocoControle
     Nodo nodo_7 = Nodo(7, 3);
     Nodo nodo_8 = Nodo(8, 6);
     Nodo nodo_9 = Nodo(9, 2);
+    Nodo nodo_10 = Nodo(10, 3);
+    Nodo nodo_11 = Nodo(11, 3);
+    Nodo nodo_12 = Nodo(12, 3);
+    Nodo nodo_13 = Nodo(13, 3);
+    Nodo nodo_14 = Nodo(14, 3);
 
     Nodo *atual;
     Nodo *caminho_instrucao;
@@ -62,7 +67,7 @@ class BlocoControle
         atual->sinais[4] = ula_fonte_b;
         atual->valores_sinais[4] = "01";
         atual->sinais[5] = ula_op;
-        atual->valores_sinais[5] = "00";
+        atual->valores_sinais[5] = "000";
         atual->sinais[6] = pc_esc;
         atual->valores_sinais[6] = "1";
         atual->sinais[7] = fonte_pc;
@@ -75,7 +80,7 @@ class BlocoControle
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "11";
         atual->sinais[2] = ula_op;
-        atual->valores_sinais[2] = "00";
+        atual->valores_sinais[2] = "000";
         //***************Nodo 2*************//
         atual = &nodo_2;
         AlocaMemoria(nodo_2.numero_sinais, nodo_2.id_estado);
@@ -84,7 +89,7 @@ class BlocoControle
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
         atual->sinais[2] = ula_op;
-        atual->valores_sinais[2] = "00";
+        atual->valores_sinais[2] = "000";
         //***************Nodo 3*************//
         atual = &nodo_3;
         AlocaMemoria(nodo_3.numero_sinais, nodo_3.id_estado);
@@ -116,7 +121,7 @@ class BlocoControle
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "00";
         atual->sinais[2] = ula_op;
-        atual->valores_sinais[2] = "10";
+        atual->valores_sinais[2] = "010";
         //***************Nodo 7*************//
         atual = &nodo_7;
         AlocaMemoria(nodo_7.numero_sinais, nodo_7.id_estado);
@@ -134,7 +139,7 @@ class BlocoControle
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "00";
         atual->sinais[2] = ula_op;
-        atual->valores_sinais[2] = "01";
+        atual->valores_sinais[2] = "001";
         atual->sinais[3] = pc_esc_cond;
         atual->valores_sinais[3] = "1";
         atual->sinais[4] = pc_esc;
@@ -148,7 +153,64 @@ class BlocoControle
         atual->valores_sinais[0] = "1";
         atual->sinais[1] = fonte_pc;
         atual->valores_sinais[1] = "10";
+        //**************Nodo 10**************//
+        atual = &nodo_10;
+        AlocaMemoria(nodo_10.numero_sinais, nodo_10.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "1";
 
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "10";
+
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "000"; //VERIRIFICAR
+
+        //*************Nodo 11******************// 10 -> 11 && 12 -> 11
+        atual = &nodo_11;
+        
+        AlocaMemoria(nodo_11.numero_sinais, nodo_11.id_estado);
+        atual->sinais[0] = mem_para_reg;
+        atual->valores_sinais[0] = "0";
+        atual->sinais[1] = reg_dst;
+        atual->valores_sinais[1] = "0";
+        atual->sinais[2] = esc_reg;
+        atual->valores_sinais[2] = "1";
+    
+        //************Nodo 12 *****************//
+        atual = &nodo_12;
+        AlocaMemoria(nodo_12.numero_sinais, nodo_12.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "1";
+
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "10";
+
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "011"; 
+
+        //*************** Nodo 13 *********************//
+        atual = &nodo_13;
+        AlocaMemoria(nodo_13.numero_sinais, nodo_13.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "1";
+
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "10";
+
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "100"; //VERIRIFICAR
+
+        //*************** Nodo 14 *********************//
+        atual = &nodo_14;
+        AlocaMemoria(nodo_14.numero_sinais, nodo_14.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "1";
+
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "10";
+
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "101"; //VERIRIFICAR
 
     }
 
@@ -162,6 +224,7 @@ class BlocoControle
         esc_mem->valor = "0";
         pc_esc_cond->valor = "0";
         pc_esc->valor = "0";
+        mem_para_reg-> valor = "0";
     }
 
 
@@ -203,6 +266,38 @@ class BlocoControle
         caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
         caminho_instrucao[0] = nodo_9;
         caminho_instrucao[1] = Nodo(-1, -1);
+    }
+
+    void CaminhoAddiu()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_10;
+        caminho_instrucao[1] = nodo_11;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
+
+    void CaminhoAndi()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_12;
+        caminho_instrucao[1] = nodo_11;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
+
+    void CaminhoLui()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_13;
+        caminho_instrucao[1] = nodo_11;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
+
+    void CaminhoOri()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_14;
+        caminho_instrucao[1] = nodo_11;
+        caminho_instrucao[2] = Nodo(-1, -1);
     }
 
     void AtualizaSinais()
@@ -318,6 +413,11 @@ class BlocoControle
 
         else if(opcode == "000010") CaminhoJump();
 
+        else if(opcode == "001001") CaminhoAddiu();
+
+        else if(opcode == "001100") CaminhoAndi();
+        
+        else if(opcode == "001111") CaminhoLui();
         //else IniciaCaminho();
         //ProximaInstrucao();
     }

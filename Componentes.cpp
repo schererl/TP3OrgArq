@@ -168,6 +168,12 @@ class Componentes
                 resultado = OperadorBits::OperaXor(entradaA->valor, entradaB->valor);
             else if( op == "1000")
                 resultado = OperadorBits::OperaShiftLeft(entradaA->valor, entradaB->valor);
+            else if(op == "1001")
+            {
+                resultado = entradaB->valor; 
+                OperadorBits::ShiftLeft(resultado, 16);
+                cout << "========RESULTADO SHIFT LEFT: " << resultado << endl;
+            }
             else
             {
                 cout << "**ERRO OPERAÇÃO DE ULA NÃO DEFINIDA" << endl;
@@ -368,15 +374,15 @@ class Componentes
             string valor_saida;
 
             
-            if(valor_sinal_controle == "00")
+            if(valor_sinal_controle == "000")
             {
                 valor_saida  = "0010"; //executa soma
             }
-            else if(valor_sinal_controle == "01")
+            else if(valor_sinal_controle == "001")
             {
                 valor_saida = "0110"; //beq subtração
             }
-            else if (valor_sinal_controle == "10") {
+            else if (valor_sinal_controle == "010") {
                 
                 if(valor_funct == "100000") valor_saida = "0010";
                 else if(valor_funct == "100010") valor_saida = "0110";
@@ -390,6 +396,18 @@ class Componentes
                 //000010 srl
                 
                 
+            }
+            else if (valor_sinal_controle == "011")
+            {
+                valor_saida = "0000";
+            }
+            else if (valor_sinal_controle == "100")
+            {
+                valor_saida =  "1001";
+            }
+            else if (valor_sinal_controle == "101")
+            {
+                valor_saida = "0011";
             }
             else{ cout << "**ERRO: sinal de controle não identificado " << valor_sinal_controle << endl;}
             //ori 111 -> or bit a bit

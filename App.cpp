@@ -217,8 +217,11 @@ int main()
     m_instr_bancoreg.ImprimeEntradas(2);
     m_dadomem_bancoreg.Opera();
     m_dadomem_bancoreg.Imprime();
+    m_dadomem_bancoreg.ImprimeEntradas(2);
     cb.ExtensaoSinal(&b_imediato, &b_ext_sinal); //entrada ula 2
-    cb.DeslocametoBits(&b_ext_sinal, &b_desl_esq); //entrada ula 3
+    
+    cb.DeslocametoBits(&b_ext_sinal, &b_desl_esq); //entrada ula 31
+    
     cout << "opcode: " << b_op_code_controle.valor << endl;
     
     bloco_controle.BuscaInstrucao();
@@ -237,9 +240,7 @@ int main()
     m_fonte_ula_2.Opera();
     m_fonte_ula_2.Imprime();
     m_fonte_ula_2.ImprimeEntradas(4);
-    cout << "aluop: " << b_ula_op.valor << endl;
     cb.OperacaoULA(&b_ula_op, &b_funct, &b_controle_ula_op);
-    cout << "aluo controle: " << b_controle_ula_op.valor << endl;
     ula.Opera();
     ula.Imprime();
     //r_ula.Opera();

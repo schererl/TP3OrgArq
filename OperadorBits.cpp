@@ -41,6 +41,16 @@ static void ShiftLeft(string &binario, int numero_shifts)
 {
     int size = binario.size() + numero_shifts;
     int cont = 0;
+    for(int i = 0; i < numero_shifts;i++)
+    {
+        binario += '0';
+        cont++;
+    }
+    //remove excedente de 32
+    int resto = binario.size() - 32;
+    binario.erase(0, resto);
+    
+    /*
     if(binario.size() == 32)
     {
         while(cont < numero_shifts) 
@@ -58,6 +68,7 @@ static void ShiftLeft(string &binario, int numero_shifts)
             cont++;
         }
     }
+    */
 }
 
 //trunca binário
