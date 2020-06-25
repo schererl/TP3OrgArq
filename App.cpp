@@ -112,9 +112,10 @@ int main()
     
     Componentes::Barramento **vb_ulta_fonte_1;
     vb_ulta_fonte_1 = (Componentes::Barramento**)malloc(2 * sizeof(Componentes::Barramento*));
-    for(int i = 0; i < 2;i++) vb_ulta_fonte_1[i] = (Componentes::Barramento*)malloc(1 * sizeof(Componentes::Barramento));
+    for(int i = 0; i < 3;i++) vb_ulta_fonte_1[i] = (Componentes::Barramento*)malloc(1 * sizeof(Componentes::Barramento));
     vb_ulta_fonte_1[0] = &b_pc_out;
     vb_ulta_fonte_1[1] = &b_saida_reg_A;
+    vb_ulta_fonte_1[2] = &b_saida_reg_B;
     Componentes::Multiplexador m_fonte_ula_1 = c.CriaMultiplexador("Mux de 1º fonte para ULA", vb_ulta_fonte_1, &b_entrada_ula_a, &b_ula_fonte_a);
     
     Componentes::Barramento **vb_ulta_fonte_2;
@@ -152,7 +153,7 @@ int main()
     Componentes::ULA ula = c.CriaULA(&b_entrada_ula_a, &b_entrada_ula_b, &b_saida_ula_op, &b_saida_ula_flag, &b_controle_ula_op);
 
     //** BLOCO DE CONTROLE **//
-    BlocoControle bloco_controle = BlocoControle(&b_pc_esc_cond, &b_pc_esc, &b_ioud, &b_ler_mem, &b_esc_mem, &b_mem_para_reg, &b_ir_esc, &b_fonte_pc, &b_ula_op, &b_ula_fonte_b, &b_ula_fonte_a, &b_esc_reg, &b_reg_dest, &b_op_code_controle);
+    BlocoControle bloco_controle = BlocoControle(&b_pc_esc_cond, &b_pc_esc, &b_ioud, &b_ler_mem, &b_esc_mem, &b_mem_para_reg, &b_ir_esc, &b_fonte_pc, &b_ula_op, &b_ula_fonte_b, &b_ula_fonte_a, &b_esc_reg, &b_reg_dest, &b_op_code_controle, &b_funct);
 
     //** CIRCUITOS COMBINACIONAIS NOS BARRAMENTOS **//
     Componentes::CircuitoBarramento cb = c.CriaCircuitoBarramento();

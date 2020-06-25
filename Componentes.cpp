@@ -150,7 +150,6 @@ class Componentes
 
         void Opera()
         {
-            /*falta shift left e shift right*/
 
             string resultado;
             string op = aluop->valor;
@@ -167,12 +166,19 @@ class Componentes
             else if( op == "0011")
                 resultado = OperadorBits::OperaXor(entradaA->valor, entradaB->valor);
             else if( op == "1000")
-                resultado = OperadorBits::OperaShiftLeft(entradaA->valor, entradaB->valor);
-            else if(op == "1001")
+            {
+                string buff_shamt = OperadorBits::ExtrairBinario(entradaB->valor, 21, 5);
+                resultado = OperadorBits::OperaShiftLeft(entradaA->valor, buff_shamt);
+            }
+            else if(op == "1001") //exclusivo para Lui
             {
                 resultado = entradaB->valor; 
                 OperadorBits::ShiftLeft(resultado, 16);
-                cout << "========RESULTADO SHIFT LEFT: " << resultado << endl;
+            }
+            else if(op == "1010")
+            {
+                string buff_shamt =  OperadorBits::ExtrairBinario(entradaB->valor, 21, 5);
+                resultado = OperadorBits::OperaShiftRight(entradaA->valor, buff_shamt);
             }
             else
             {
@@ -391,6 +397,7 @@ class Componentes
                 else if(valor_funct == "101010") valor_saida = "0111";
                 else if(valor_funct == "100110") valor_saida = "0011";
                 else if(valor_funct == "000000") valor_saida = "1000"; 
+                else if(valor_funct == "000010") valor_saida = "1010";
                 else{ cout << "**ERRO: funct não identificado " << valor_funct << endl;}
                 //000000 sll
                 //000010 srl

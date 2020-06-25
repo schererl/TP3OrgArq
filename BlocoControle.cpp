@@ -36,6 +36,8 @@ class BlocoControle
     Nodo nodo_12 = Nodo(12, 3);
     Nodo nodo_13 = Nodo(13, 3);
     Nodo nodo_14 = Nodo(14, 3);
+    Nodo nodo_15 = Nodo(15, 3);
+    Nodo nodo_16 = Nodo(16, 3);
 
     Nodo *atual;
     Nodo *caminho_instrucao;
@@ -59,7 +61,7 @@ class BlocoControle
         atual->sinais[0] = ler_mem;
         atual->valores_sinais[0] = "1";
         atual->sinais[1] = ula_fonte_a;
-        atual->valores_sinais[1] = "0";
+        atual->valores_sinais[1] = "00";
         atual->sinais[2] = i_ou_d;
         atual->valores_sinais[2] = "0";
         atual->sinais[3] = ir_esc;
@@ -76,7 +78,7 @@ class BlocoControle
         atual = &nodo_1;
         AlocaMemoria(nodo_1.numero_sinais, nodo_1.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "0";
+        atual->valores_sinais[0] = "00";
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "11";
         atual->sinais[2] = ula_op;
@@ -85,7 +87,7 @@ class BlocoControle
         atual = &nodo_2;
         AlocaMemoria(nodo_2.numero_sinais, nodo_2.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
         atual->sinais[2] = ula_op;
@@ -117,7 +119,7 @@ class BlocoControle
         atual = &nodo_6;
         AlocaMemoria(nodo_6.numero_sinais, nodo_6.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "00";
         atual->sinais[2] = ula_op;
@@ -135,7 +137,7 @@ class BlocoControle
         atual = &nodo_8;
         AlocaMemoria(nodo_8.numero_sinais, nodo_8.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "00";
         atual->sinais[2] = ula_op;
@@ -157,7 +159,7 @@ class BlocoControle
         atual = &nodo_10;
         AlocaMemoria(nodo_10.numero_sinais, nodo_10.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
 
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
@@ -177,10 +179,11 @@ class BlocoControle
         atual->valores_sinais[2] = "1";
     
         //************Nodo 12 *****************//
-        atual = &nodo_12;
+        
+        atual = &nodo_12; 
         AlocaMemoria(nodo_12.numero_sinais, nodo_12.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
 
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
@@ -192,7 +195,7 @@ class BlocoControle
         atual = &nodo_13;
         AlocaMemoria(nodo_13.numero_sinais, nodo_13.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
 
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
@@ -204,13 +207,33 @@ class BlocoControle
         atual = &nodo_14;
         AlocaMemoria(nodo_14.numero_sinais, nodo_14.id_estado);
         atual->sinais[0] = ula_fonte_a;
-        atual->valores_sinais[0] = "1";
+        atual->valores_sinais[0] = "01";
 
         atual->sinais[1] = ula_fonte_b;
         atual->valores_sinais[1] = "10";
 
         atual->sinais[2] = ula_op;
         atual->valores_sinais[2] = "101"; //VERIRIFICAR
+        //************** Nodo 15 ******************//
+        atual = &nodo_15; //sll srl
+        AlocaMemoria(nodo_15.numero_sinais, nodo_15.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "10";
+
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "10";
+
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "010"; 
+        //**************** Nodo 16 ******************//
+        atual = &nodo_16; //sll srl
+        AlocaMemoria(nodo_16.numero_sinais, nodo_16.id_estado);
+        atual->sinais[0] = mem_para_reg;
+        atual->valores_sinais[0] = "0";
+        atual->sinais[1] = reg_dst;
+        atual->valores_sinais[1] = "1";
+        atual->sinais[2] = esc_reg;
+        atual->valores_sinais[2] = "1";
 
     }
 
@@ -227,6 +250,13 @@ class BlocoControle
         mem_para_reg-> valor = "0";
     }
 
+    void CaminhoShift()
+    {
+        caminho_instrucao = (Nodo*)malloc(3 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_15;
+        caminho_instrucao[1] = nodo_16;
+        caminho_instrucao[2] = Nodo(-1, -1);
+    }
 
     void CaminhoLoad()
     {
@@ -325,7 +355,10 @@ class BlocoControle
     Componentes::Barramento *esc_reg;
     Componentes::Barramento *reg_dst;
 
+
     Componentes::Barramento *opcode_instrucao;
+    Componentes::Barramento *funct;
+    
     BlocoControle(Componentes::Barramento *pc_esc_cond,
         Componentes::Barramento *pc_esc,
         Componentes::Barramento *i_ou_d,
@@ -339,7 +372,8 @@ class BlocoControle
         Componentes::Barramento *ula_fonte_a,
         Componentes::Barramento *esc_reg,
         Componentes::Barramento *reg_dst,
-        Componentes::Barramento *opcode_instrucao
+        Componentes::Barramento *opcode_instrucao,
+        Componentes::Barramento *funct
     )
     {
 
@@ -357,6 +391,7 @@ class BlocoControle
         this->esc_reg = esc_reg;
         this->reg_dst = reg_dst;
         this->opcode_instrucao = opcode_instrucao;
+        this->funct = funct;
         CriaNodos();
         IniciaCaminho();
     }
@@ -407,8 +442,12 @@ class BlocoControle
 
         else if(opcode == "101011") CaminhoStore();
 
-        else if(opcode == "000000") CaminhoTipoR();
-
+        else if(opcode == "000000")
+        { 
+            if(funct->valor == "000000" || funct->valor == "000010") CaminhoShift();
+            
+            else CaminhoTipoR();
+        }
         else if(opcode == "000100") CaminhoBranchEq();
 
         else if(opcode == "000010") CaminhoJump();
@@ -418,6 +457,8 @@ class BlocoControle
         else if(opcode == "001100") CaminhoAndi();
         
         else if(opcode == "001111") CaminhoLui();
+
+        else if(opcode == "001101") CaminhoOri();
         //else IniciaCaminho();
         //ProximaInstrucao();
     }
