@@ -1,3 +1,4 @@
+
 #include <string>
 #include <iostream>
 #include <stdlib.h>
@@ -38,6 +39,7 @@ class BlocoControle
     Nodo nodo_14 = Nodo(14, 3);
     Nodo nodo_15 = Nodo(15, 3);
     Nodo nodo_16 = Nodo(16, 3);
+    Nodo nodo_17 = Nodo(17, 6);
 
     Nodo *atual;
     Nodo *caminho_instrucao;
@@ -235,6 +237,21 @@ class BlocoControle
         atual->sinais[2] = esc_reg;
         atual->valores_sinais[2] = "1";
 
+        //***************Nodo 17*************//
+        atual = &nodo_17;
+        AlocaMemoria(nodo_17.numero_sinais, nodo_17.id_estado);
+        atual->sinais[0] = ula_fonte_a;
+        atual->valores_sinais[0] = "01";
+        atual->sinais[1] = ula_fonte_b;
+        atual->valores_sinais[1] = "00";
+        atual->sinais[2] = ula_op;
+        atual->valores_sinais[2] = "110";
+        atual->sinais[3] = pc_esc_cond;
+        atual->valores_sinais[3] = "1";
+        atual->sinais[4] = pc_esc;
+        atual->valores_sinais[4] = "0";
+        atual->sinais[5] = fonte_pc;
+        atual->valores_sinais[5] = "01";
     }
 
     void ZeraSinais()
@@ -257,6 +274,7 @@ class BlocoControle
         caminho_instrucao[1] = nodo_16;
         caminho_instrucao[2] = Nodo(-1, -1);
     }
+
 
     void CaminhoLoad()
     {
@@ -288,6 +306,14 @@ class BlocoControle
     {
         caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
         caminho_instrucao[0] = nodo_8;
+        caminho_instrucao[1] = Nodo(-1, -1);
+    }
+
+
+    void CaminhoBranchNEq()
+    {
+        caminho_instrucao = (Nodo*)malloc(2 * sizeof(Nodo));
+        caminho_instrucao[0] = nodo_17;
         caminho_instrucao[1] = Nodo(-1, -1);
     }
 
@@ -410,7 +436,6 @@ class BlocoControle
     void ProximaInstrucao()
     {
         ZeraSinais();
-        //atual = caminho_instrucao[index_caminho];
         auxiliar = caminho_instrucao[index_caminho];
         index_caminho++;
         if(auxiliar.id_estado == -1)
@@ -418,14 +443,6 @@ class BlocoControle
             IniciaCaminho();
             return;
         }
-        /*
-        else if(auxiliar.id_estado == 1) {
-            
-            cout<< "INSTRUÇÃO ATUAL: " << auxiliar.id_estado << endl;
-            BuscaInstrucao();
-            //return;
-        }
-        */
         AtualizaSinais();
         
     }
@@ -450,6 +467,8 @@ class BlocoControle
         }
         else if(opcode == "000100") CaminhoBranchEq();
 
+        else if(opcode == "000101") CaminhoBranchNEq();
+
         else if(opcode == "000010") CaminhoJump();
 
         else if(opcode == "001001") CaminhoAddiu();
@@ -463,7 +482,11 @@ class BlocoControle
         //ProximaInstrucao();
     }
 
-    
+    int GetEtapa()
+    {
+        return auxiliar.id_estado;
+    }
+
     void Imprime()
     {
         cout << "\n=======================================================================\nestado atual: " << auxiliar.id_estado << endl;
@@ -481,7 +504,6 @@ class BlocoControle
 int main()
 {
     Componentes c;
-
     Componentes::Barramento b1 = c.CriaBarramento("pc_esc_cond");
     Componentes::Barramento b2 = c.CriaBarramento("pc_esc");
     Componentes::Barramento b3 = c.CriaBarramento("i_ou_d");
@@ -497,15 +519,11 @@ int main()
     Componentes::Barramento b13 = c.CriaBarramento("reg_dst");
     Componentes::Barramento b14 = c.CriaBarramento("flag_AND_PC_esc_cond");
     Componentes::Barramento b15 = c.CriaBarramento("flag_and_PC_esc_cond_OR_pc_sc");
-
     Componentes::Barramento instrucao = c.CriaBarramento("opcode_instrucao");
     instrucao.valor = "100011";
-
-
    BlocoControle controle = BlocoControle(&b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &b10, &b11, &b12, &b13, &instrucao);
    while(true)
    {
-
     cout << b1.nome << ": " << b1.valor << endl;
     cout << b2.nome << ": " << b2.valor << endl;
     cout << b3.nome << ": " << b3.valor << endl;
@@ -523,7 +541,6 @@ int main()
     cout << b15.nome << ": " << b15.valor << endl;
     int n;
     cin >> n;
-
     if(n == -1) break;
     if(n == 2)
     {
@@ -532,8 +549,8 @@ int main()
         instrucao.valor = str;
     }
     controle.ProximaInstrucao();
-
    }
    
 }
 */
+

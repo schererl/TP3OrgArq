@@ -121,6 +121,13 @@ static string OperaAdd(string A, string B)
         s /= 2;
         i--; j--; 
     } 
+    
+    if(resp.size() > 32)
+    {
+        int sobra = resp.size() - 32;
+        resp.erase(0, sobra);
+    }
+    
     return resp;
 }
 
@@ -332,4 +339,13 @@ static void AdjustBin(std::string &bin, int command_size)
     }
 
 }
+
+//soma 1 ao hexadecimal
+static void SumHex_1(std::string &mem)
+{
+    std::string bin = HexaToBin(mem);
+    sum_1(bin);
+    mem = BinToHexa(bin);
+}
+
 };

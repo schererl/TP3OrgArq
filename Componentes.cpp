@@ -180,6 +180,8 @@ class Componentes
                 string buff_shamt =  OperadorBits::ExtrairBinario(entradaB->valor, 21, 5);
                 resultado = OperadorBits::OperaShiftRight(entradaA->valor, buff_shamt);
             }
+            else if(op == "1111") //BNE
+                resultado = OperadorBits::OperaSub(entradaA->valor, entradaB->valor);
             else
             {
                 cout << "**ERRO OPERAÇÃO DE ULA NÃO DEFINIDA" << endl;
@@ -191,8 +193,10 @@ class Componentes
 
             saida -> valor = resultado; 
 
-            if(resultado == "00000000000000000000000000000000") 
+            if(resultado == "00000000000000000000000000000000" && op != "1111") 
                 zero -> valor = "1"; //MUDAR
+            else if(resultado != "00000000000000000000000000000000" && op == "1111")
+                zero -> valor = "1";
             else
                 zero -> valor = "0";
             
@@ -390,7 +394,7 @@ class Componentes
             }
             else if (valor_sinal_controle == "010") {
                 
-                if(valor_funct == "100000") valor_saida = "0010";
+                if(valor_funct == "100001") valor_saida = "0010";
                 else if(valor_funct == "100010") valor_saida = "0110";
                 else if(valor_funct == "100100") valor_saida = "0000";
                 else if(valor_funct == "100101") valor_saida = "0001";
@@ -415,6 +419,10 @@ class Componentes
             else if (valor_sinal_controle == "101")
             {
                 valor_saida = "0011";
+            }
+            else if (valor_sinal_controle == "110")
+            {
+                valor_saida = "1111";
             }
             else{ cout << "**ERRO: sinal de controle não identificado " << valor_sinal_controle << endl;}
             //ori 111 -> or bit a bit
